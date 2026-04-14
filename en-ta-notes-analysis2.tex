@@ -1,0 +1,87 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{bm} % For bold math symbols
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+% Custom command for italicized terminology and "quotes"
+\newcommand{\qt}[1]{\textit{``#1''}}
+
+\newenvironment*{extra}{}{}
+
+% --- Page Setup ---
+\geometry{margin=1in}
+
+% ==========================================
+% THEOREM CONFIGURATION
+% ==========================================
+
+\newtheoremstyle{colonstyle}
+{\topsep}{\topsep}{\upshape}{}{\bfseries}{:}{.5em}
+{\thmname{#1}\thmnumber{ #2}\thmnote{ (\textnormal{\textit{#3}})}}
+
+\theoremstyle{colonstyle}
+
+\newtheorem{theorem}{Theorem}[section]
+
+% --- NUMBEREd ENVIRONMENTS ---
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% --- UNNUMBERED ENVIRONMENTS ---
+% The asterisk (*) prevents them from being numbered!
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem*{claim*}{Claim}
+
+\newtheorem*{notation}{Notation}
+\newtheorem*{remark}{Remark}
+\newtheorem*{exercise}{Exercise}
+\newtheorem*{example}{Example}
+\newtheorem*{summary}{Summary}
+\newtheorem*{warmup}{Warm up}
+\newtheorem*{question}{Question}
+\newtheorem*{answer}{Answer}
+\newtheorem*{importantremark}{Important remark}
+\newtheorem*{goals}{Goals}
+
+% Changing proof environment
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  % This line sets the font to Bold + Italic and adds the colon
+  \item[\hskip\labelsep
+  \bfseries\itshape #1:]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+
+%Change QED symbol:
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+
+
+\title{Calculus 2: Week 08 TA Notes}
+\author{TA Notes Transcription}
+\date{Monday, April 13, 2026} % [cite: 167]
+
+\begin{document}
+
+\include{content/w8-tangent-spaces.tex}
+\include{content/w8-jordan-measure.tex}
+\include{content/w8-multidimensional-integrals.tex}
+\include{content/week8.tex}
+\end{document}

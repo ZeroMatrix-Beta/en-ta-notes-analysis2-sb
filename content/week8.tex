@@ -1,0 +1,641 @@
+% ==========================================
+% CHAPTER: TANGENT SPACES
+% ==========================================
+\section{Tangent Spaces} %
+
+% --- GLOBAL SCRIPT COUNTERS ---
+% We define these once to dynamically jump in and out of the script's numbering!
+\newcounter{savedSec}
+\newcounter{savedThm}
+
+% --- TEACHER'S INTRO ---
+\noindent
+\textbf{Teacher's Note:} Before we dive into the heavy formulas, let's build some intuition. Imagine you are walking on a smooth, curved mountain (a manifold). At any exact point you stand, if you look straight ahead, left, or right, you are looking along a flat plane that perfectly grazes the mountain at your feet. That flat plane is the \qt{tangent space}. The direction sticking straight up into the sky, perpendicular to your flat plane, is the \qt{normal} vector. 
+% -----------------------
+
+\subsection{Formal Definition}
+
+% Jump to Script Definition 12.13
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{12}
+\setcounter{theorem}{12} 
+
+\begin{theorem}[Tangent and Normal Vectors] %
+Let $M \subset \mathbb{R}^n$ be a $d$-dimensional $C^1$ submanifold. %
+For a given point $p \in M$, we say that a vector $\tau \in \mathbb{R}^n$ is \qt{tangent} to $M$ at $p$ if there exists a sequence $p_k \in M$ with $p_k \to p$, $p_k \neq p$, and a sequence of positive numbers $r_k$ converging to zero such that %
+\[
+\lim_{k \to \infty} \frac{p_k - p}{r_k} = \tau. %
+\]
+The set of all tangent vectors to $M$ at $p$ is called the \qt{tangent space} of $M$ at $p$ and is denoted by %
+\[
+T_pM := \{ \tau \in \mathbb{R}^n \mid \tau \text{ is \qt{tangent} to } M \text{ at } p \}. %
+\]
+Furthermore, we say that a vector $\nu \in \mathbb{R}^n$ is \qt{normal} (i.e., perpendicular) to $M$ at $p$ if %
+\[
+\tau \cdot \nu = 0 \quad \text{for all } \tau \in T_pM. %
+\]
+The set of all normal vectors at $p$ is called the \qt{normal space} of $M$ at $p$. %
+\end{theorem}
+
+% Restore Counters
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+This is the formal definition of \qt{tangent} and \qt{normal} spaces at a point $p$ of some given $C^1$ submanifold. However, as you saw in the lectures, there is a much better way to find the \qt{tangent space} using partial derivatives.
+
+\subsection{Practical Computation for Parametrized Surfaces}
+
+% Jump to Script Proposition 12.16
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{12}
+\setcounter{theorem}{15}
+
+\begin{theorem}[Tangent and Normal Vectors for Parametrized Surfaces] %
+Let $V \subset \mathbb{R}^2$ be open and let $\phi : V \to \mathbb{R}^3$ be a parametrized surface. Then, for every $x \in V$ and $p = \phi(x) \in M$, the following hold: %
+\begin{enumerate}
+    \item The \qt{tangent space} to $M$ at $p$ is given by the span of the partial derivatives:
+    \[
+    T_pM = D\phi_x(\mathbb{R}^2) = \text{span}\{\partial_1\phi(x), \partial_2\phi(x)\}. %
+    \]
+    \item The vectors $\partial_1\phi(x)$ and $\partial_2\phi(x)$ are linearly independent and form a basis of $T_pM$. %
+    \item A \qt{normal vector} to $M$ at $p = \phi(x)$ is given by the cross product $\partial_1\phi(x) \times \partial_2\phi(x)$, and a \qt{normal vector} with modulus one (unit normal) is given by %
+    \[
+    \nu(x) := \frac{\partial_1\phi(x) \times \partial_2\phi(x)}{|\partial_1\phi(x) \times \partial_2\phi(x)|}. %
+    \]
+    \item Moreover, the \qt{normal space} is the span of this vector:
+    \[
+    N_pM = \text{span}\{\nu(x)\}. %
+    \]
+\end{enumerate}
+\end{theorem}
+
+% Restore Counters
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+% --- DUAL-PURPOSE TIKZ 1: TANGENT SURFACE ---
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Wavy surface using pattern instead of opacity
+    \draw[very thick, pattern=north east lines, pattern color=blue!40] 
+        (0,0) to[out=20,in=160] (4,0.5) to[out=70,in=250] (4.5,3) to[out=170,in=10] (0.5,2.5) to[out=250,in=70] (0,0);
+    
+    % Grid lines (thin, gray)
+    \draw[gray, thin, dashed] (1,0.2) to[out=30,in=170] (4.2, 1.2);
+    \draw[gray, thin, dashed] (2,0.3) to[out=40,in=180] (4.4, 2);
+    \draw[gray, thin, dashed] (0.2,1) to[out=70,in=240] (1.5, 2.7);
+    \draw[gray, thin, dashed] (1.5,0.2) to[out=75,in=250] (3, 2.9);
+
+    % Point p
+    \coordinate (P) at (2.5, 1.5);
+    \fill[black] (P) circle (1.5pt) node[anchor=north west, fill=white, inner sep=1pt] {$p = \phi(x)$};
+
+    % Double Encoded Vectors
+    % Tangent 1: Red, Solid
+    \draw[->, very thick, red!80!black, solid] (P) -- ++(1.5, 0.4) node[right, fill=white, inner sep=1pt] {$\partial_1\phi(x)$};
+    % Tangent 2: Blue, Dashed
+    \draw[->, very thick, blue!80!black, dashed] (P) -- ++(0.3, 1.2) node[above, fill=white, inner sep=1pt] {$\partial_2\phi(x)$};
+    
+    % Normal vector: Green, Dotted
+    \draw[->, very thick, green!50!black, dotted] (P) -- ++(-0.6, 1.8) node[left, fill=white, inner sep=1pt] {$\vec{n} = \partial_1\phi \times \partial_2\phi$};
+    
+    \node at (2,-0.5) {\textit{Visualization of Proposition 12.16}};
+\end{tikzpicture}
+\end{center}
+
+\begin{example}[Spherical Coordinates] %
+Consider the parameterization of a unit sphere with a thin slice deleted: %
+\[
+\phi : (0, \pi) \times (-\pi, \pi) \to \mathbb{R}^3, \quad (\theta, \varphi) \mapsto 
+\begin{pmatrix}
+\sin\theta \cos\varphi \\
+\sin\theta \sin\varphi \\
+\cos\theta
+\end{pmatrix}. %
+\]
+The \qt{tangent space} is $T_pM = D\phi_x(\mathbb{R}^2)$. We compute the partial derivatives spanning $T_pM$: %
+\begin{align*}
+\partial_1\phi(x) &= 
+\begin{pmatrix}
+\cos\theta \cos\varphi \\
+\cos\theta \sin\varphi \\
+-\sin\theta
+\end{pmatrix}, \quad
+\partial_2\phi(x) &= 
+\begin{pmatrix}
+-\sin\theta \sin\varphi \\
+\sin\theta \cos\varphi \\
+0
+\end{pmatrix}. %
+\end{align*}
+A \qt{normal vector} is then given by the cross product $\vec{n} = \partial_1\phi(x) \times \partial_2\phi(x)$: %
+\[
+\vec{n} = 
+\begin{pmatrix}
+\sin^2\theta \cos\varphi \\
+\sin^2\theta \sin\varphi \\
+\cos\theta\sin\theta\cos^2\varphi + \cos\theta\sin\theta\sin^2\varphi
+\end{pmatrix} 
+= \sin\theta 
+\begin{pmatrix}
+\sin\theta \cos\varphi \\
+\sin\theta \sin\varphi \\
+\cos\theta
+\end{pmatrix}. %
+\]
+Therefore, the unit \qt{normal vector} $\nu(x)$ is simply the position vector itself $\nu(x) = \phi(\theta, \varphi)$.
+\end{example}
+
+\begin{extra}
+\textbf{Alternative Notations \& Wikipedia Warning:} \\
+Depending on the textbook, you might see the tangent space denoted as $T_pM$, $T_xM$, or $TM_p$. The differential (Jacobian map) $D\phi_x$ is also frequently written as $d\phi_x$ or $\phi_{*, x}$ (the \qt{pushforward} map). When the notes say $T_p M = D\phi_x(\mathbb{R}^2)$, they mean that the tangent plane is the image of the flat 2D plane under the linear transformation given by the Jacobian matrix.
+\end{extra}
+
+% --- DUAL-PURPOSE TIKZ 2: PUSHFORWARD DIFFERENTIAL ---
+% --- REVISED TIKZ 7 & 8: NORMAL DOMAINS ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    
+    % TYPE I
+    \begin{scope}[xshift=0cm]
+        \node at (2, 3.5) {\textbf{Type I (x-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (1, 0) node[below] {$a$} -- (1, 2.5);
+        \draw[dotted, very thick] (3, 0) node[below] {$b$} -- (3, 2.5);
+        
+        \fill[pattern=north west lines, pattern color=orange!80] 
+            (1, {0.3*sin(1*100) + 1}) -- plot[domain=1:3] (\x, {-0.2*(\x-2)*(\x-2) + 2.5}) -- (3, {0.3*sin(3*100) + 1}) -- plot[domain=3:1] (\x, {0.3*sin(\x*100) + 1}) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid, domain=1:3] plot (\x, {0.3*sin(\x*100) + 1}); 
+        \draw[very thick, red!80, dashed, domain=1:3] plot (\x, {-0.2*(\x-2)*(\x-2) + 2.5}); 
+        
+        % Labels pushed safely to the right side of the bound 'b'
+        \node[right, blue!80!black] at (3.1, 0.9) {$y = g_1(x)$};
+        \node[right, red!80] at (3.1, 2.3) {$y = g_2(x)$};
+        
+        \draw[->, very thick, green!50!black] (2, {0.3*sin(2*100) + 1}) -- (2, {-0.2*(2-2)*(2-2) + 2.5}) node[midway, right, text=black] {slice};
+    \end{scope}
+
+    % TYPE II
+    \begin{scope}[xshift=7cm]
+        \node at (2, 3.5) {\textbf{Type II (y-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (0, 0.5) node[left] {$c$} -- (3.5, 0.5);
+        \draw[dotted, very thick] (0, 2.5) node[left] {$d$} -- (3.5, 2.5);
+        
+        \fill[pattern=horizontal lines, pattern color=orange!80] 
+            (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5) -- (2.8, 2.5) .. controls (3.5, 1.5) .. (3, 0.5) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid] (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5); 
+        \draw[very thick, red!80, dashed] (3, 0.5) .. controls (3.5, 1.5) .. (2.8, 2.5); 
+        
+        % Labels pushed safely below the bound 'c'
+        \node[below, blue!80!black] at (1, 0.6) {$x = h_1(y)$};
+        \node[below, red!80] at (3.5, 0.6) {$x = h_2(y)$};
+        
+        \draw[->, very thick, green!50!black] (0.7, 1.5) -- (3.3, 1.5) node[midway, above, text=black] {slice};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+
+% ==========================================
+% CHAPTER: JORDAN MEASURE
+% ==========================================
+\section{Jordan Measure} %
+
+\begin{extra}
+\textbf{Teacher's Note: The \qt{Pixel} Approach to Area}\\
+We want to find the volume of strange shapes by approximating them with blocky \qt{pixels} (dyadic cubes). 
+\begin{itemize}
+    \item If we take all pixels touching the shape, we get an \qt{outer} overestimate.
+    \item If we only take pixels $100\%$ inside the shape, we get an \qt{inner} underestimate.
+\end{itemize}
+If we make our pixels infinitely small, and the inner and outer approximations squeeze to the exact same number, the shape is \qt{Jordan measurable}!
+\end{extra}
+
+\subsection{Dyadic Cubes: Intuition vs. Script}
+
+\begin{theorem*}[TA's Intuitive Dyadic Cubes] %
+A \qt{dyadic cube} of side length $2^{-p}$ ($p \ge 0$) is defined on a standard grid. The union of same-size dyadic cubes is called a \qt{dyadic set}. %
+\[
+E = \bigcup_{l=1}^N 2^{-p}\left(a(l) + [0,1)^n\right), \quad a(l) \in \mathbb{Z}^n
+\]
+\end{theorem*}
+
+% --- DUAL-PURPOSE TIKZ 3: DYADIC SUBDIVISION ---
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Level 0
+    \begin{scope}[xshift=0cm]
+        \draw[very thick, pattern=crosshatch dots, pattern color=gray!60] (0,0) rectangle (2,2);
+        \node[align=center] at (1, -0.5) {$p=0$ \\ \textit{Side length $1$}};
+    \end{scope}
+    \draw[->, thick] (2.2, 1) -- (2.8, 1) node[midway, above] {Subdivide};
+
+    % Level 1
+    \begin{scope}[xshift=3cm]
+        \draw[very thick, pattern=crosshatch dots, pattern color=gray!60] (0,0) rectangle (2,2);
+        \draw[very thick] (1,0) -- (1,2);
+        \draw[very thick] (0,1) -- (2,1);
+        \node[align=center] at (1, -0.5) {$p=1$ \\ \textit{Side length $1/2$}};
+    \end{scope}
+    \draw[->, thick] (5.2, 1) -- (5.8, 1) node[midway, above] {Subdivide};
+
+    % Level 2
+    \begin{scope}[xshift=6cm]
+        \draw[very thick, pattern=crosshatch dots, pattern color=gray!60] (0,0) rectangle (2,2);
+        \draw[step=0.5, very thick] (0,0) grid (2,2);
+        \node[align=center] at (1, -0.5) {$p=2$ \\ \textit{Side length $1/4$}};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{0.5cm}
+
+% Jump to Script Definition 13.1
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{13}
+\setcounter{theorem}{0} 
+
+\begin{theorem}[Dyadic Cubes]
+A \qt{dyadic cube} of side length $2^{-p}$ ($p \in \mathbb{N}_0$) in $\mathbb{R}^n$ is a set of the form
+$Q = 2^{-p}(a + [0, 1)^n)$ where $a \in \mathbb{Z}^n$. We denote the set of all dyadic cubes of side length $2^{-p}$ by $\Omega_p$.
+\end{theorem}
+
+\subsection{Inner and Outer Volumes}
+
+% Script Definition 13.2
+\begin{theorem}[Inner and Outer Approximations]
+Let $A \subset \mathbb{R}^n$ be a bounded set. For $p \in \mathbb{N}_0$, we define the \textbf{inner approximation} $I(A, p)$ and the \textbf{outer approximation} $O(A, p)$ by:
+\begin{align*}
+I(A, p) &:= \bigcup \{ Q \in \Omega_p \mid \overline{Q} \subset A^\circ \}, \\
+O(A, p) &:= \bigcup \{ Q \in \Omega_p \mid Q \cap A \neq \emptyset \}.
+\end{align*}
+The \textbf{inner measure} and \textbf{outer measure} of $A$ are defined as:
+\[
+\mu_{\text{in}}(A) := \lim_{p \to \infty} \mu(I(A, p)), \quad \text{and} \quad \mu_{\text{out}}(A) := \lim_{p \to \infty} \mu(O(A, p)).
+\]
+A bounded set $A$ is \textbf{Jordan measurable} if $\mu_{\text{in}}(A) = \mu_{\text{out}}(A)$.
+\end{theorem}
+
+% Restore Counters
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+% --- DUAL-PURPOSE TIKZ 4: OUTER MEASURE ---
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    \begin{scope}[xshift=0cm]
+        \node at (2, 4.5) {\textbf{Outer Approx $O(A, 1)$}};
+        \draw[step=1.0, gray, thin] (0,0) grid (4,4);
+        
+        % Colored Hatching
+        \fill[pattern=north east lines, pattern color=red!60!black] 
+            (1,0) rectangle (3,1) (0,1) rectangle (4,2) (0,2) rectangle (3,3) (1,3) rectangle (3,4);
+        \draw[step=1.0, very thick, red!50!black, dashed] (0,0) grid (4,4);
+        
+        \draw[ultra thick, black, fill=white, fill opacity=0.8] 
+            (1.2, 0.8) .. controls (0.6, 2.0) and (1.5, 3.3) .. (2.2, 3.1) .. controls (2.8, 2.9) and (3.3, 2.2) .. (3.1, 1.6) .. controls (2.9, 1.0) and (2.0, 0.6) .. cycle;
+        \node at (2, -0.5) {Large overestimate.};
+    \end{scope}
+
+    \draw[->, very thick] (4.5, 2) -- (5.5, 2) node[midway, above] {Refine $p$};
+
+    \begin{scope}[xshift=6cm]
+        \node at (2, 4.5) {\textbf{Outer Approx $O(A, 2)$}};
+        \draw[step=0.5, gray, thin] (0,0) grid (4,4);
+        
+        \fill[pattern=north east lines, pattern color=red!60!black] 
+            (0.5, 0.5) rectangle (2.5, 1.0) (0.5, 1.0) rectangle (3.5, 1.5) (0.5, 1.5) rectangle (3.5, 2.0) (1.0, 2.0) rectangle (3.5, 2.5) (1.0, 2.5) rectangle (3.0, 3.0) (1.5, 3.0) rectangle (2.5, 3.5);
+        \draw[step=0.5, very thick, red!50!black, dashed] (0,0) grid (4,4);
+        
+        \draw[ultra thick, black, fill=white, fill opacity=0.8] 
+            (1.2, 0.8) .. controls (0.6, 2.0) and (1.5, 3.3) .. (2.2, 3.1) .. controls (2.8, 2.9) and (3.3, 2.2) .. (3.1, 1.6) .. controls (2.9, 1.0) and (2.0, 0.6) .. cycle;
+        \node at (2, -0.5) {$\mu(O(A, 2)) \le \mu(O(A, 1))$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+% --- DUAL-PURPOSE TIKZ 5: INNER MEASURE ---
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    \begin{scope}[xshift=0cm]
+        \node at (2, 4.5) {\textbf{Inner Approx $I(A, 1)$}};
+        \draw[step=1.0, gray, thin] (0,0) grid (4,4);
+        
+        \fill[pattern=crosshatch, pattern color=blue!80!black] (1,1) rectangle (2,2);
+        \draw[step=1.0, very thick, blue!50!black, solid] (0,0) grid (4,4);
+        
+        \draw[ultra thick, black, fill=white, fill opacity=0.7] 
+            (1.2, 0.8) .. controls (0.6, 2.0) and (1.5, 3.3) .. (2.2, 3.1) .. controls (2.8, 2.9) and (3.3, 2.2) .. (3.1, 1.6) .. controls (2.9, 1.0) and (2.0, 0.6) .. cycle;
+        \node at (2, -0.5) {Small underestimate.};
+    \end{scope}
+
+    \draw[->, very thick] (4.5, 2) -- (5.5, 2) node[midway, above] {Refine $p$};
+
+    \begin{scope}[xshift=6cm]
+        \node at (2, 4.5) {\textbf{Inner Approx $I(A, 2)$}};
+        \draw[step=0.5, gray, thin] (0,0) grid (4,4);
+        
+        \fill[pattern=crosshatch, pattern color=blue!80!black] 
+            (1.5, 1.0) rectangle (2.0, 1.5) (1.5, 1.5) rectangle (2.0, 2.0) (2.0, 1.5) rectangle (2.5, 2.0) (2.5, 1.5) rectangle (3.0, 2.0) (1.5, 2.0) rectangle (2.0, 2.5) (2.0, 2.0) rectangle (2.5, 2.5) (1.5, 2.5) rectangle (2.0, 3.0);
+        \draw[step=0.5, very thick, blue!50!black, solid] (0,0) grid (4,4);
+        
+        \draw[ultra thick, black, fill=white, fill opacity=0.7] 
+            (1.2, 0.8) .. controls (0.6, 2.0) and (1.5, 3.3) .. (2.2, 3.1) .. controls (2.8, 2.9) and (3.3, 2.2) .. (3.1, 1.6) .. controls (2.9, 1.0) and (2.0, 0.6) .. cycle;
+        \node at (2, -0.5) {$\mu(I(A, 2)) \ge \mu(I(A, 1))$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+
+% ==========================================
+% CHAPTER: MULTIDIMENSIONAL INTEGRALS
+% ==========================================
+\section{Multidimensional Integrals} %
+
+% Jump to Script Definition 13.40
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{13}
+\setcounter{theorem}{39} 
+
+\begin{theorem}[Hypograph]
+Let $A \subset \mathbb{R}^n$ and $f : A \to [0, \infty)$. The \textbf{hypograph} of $f$ is defined as the set
+\[
+\Gamma_A(f) := \{ (x, y) \in \mathbb{R}^n \times \mathbb{R} \mid x \in A, 0 \le y < f(x) \} \subset \mathbb{R}^{n+1}.
+\]
+\end{theorem}
+
+% Restore
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+% --- DUAL-PURPOSE TIKZ 6: THE HYPOGRAPH ---
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    \draw[->, thick] (0,0,0) -- (3,0,0) node[right] {$y$};
+    \draw[->, thick] (0,0,0) -- (0,3,0) node[above] {$z = f(x,y)$};
+    \draw[->, thick] (0,0,0) -- (0,0,4) node[below left] {$x$};
+    
+    % Domain A
+    \draw[pattern=dots, pattern color=gray!80, draw=black, very thick, dashed] 
+        (1,0,1) .. controls (2,0,1) and (2.5,0,2) .. (2,0,3) .. controls (1.5,0,3.5) and (0.5,0,2.5) .. (1,0,1) -- cycle;
+    \node[fill=white, inner sep=1pt] at (1.5, 0, 2) {$A \subset \mathbb{R}^2$};
+    
+    % The Surface
+    \draw[pattern=north east lines, pattern color=blue!80!black, draw=blue!80!black, very thick] 
+        (1,1.5,1) .. controls (2,2,1) and (2.5,2.5,2) .. (2,1.8,3) .. controls (1.5,1.2,3.5) and (0.5,1.0,2.5) .. (1,1.5,1) -- cycle;
+        
+    \draw[dashed, very thick, blue!50!black] (1,0,1) -- (1,1.5,1);
+    \draw[dashed, very thick, blue!50!black] (2,0,1.5) -- (2,2.05,1.5);
+    \draw[dashed, very thick, blue!50!black] (2,0,3) -- (2,1.8,3);
+    \draw[dashed, very thick, blue!50!black] (0.8,0,2.5) -- (0.8,1.05,2.5);
+    
+    \node[blue!80!black, fill=white] at (1.5, 2.8, 2) {Graph of $f(x,y)$};
+    \node at (3.5, 1, 1) {$\Gamma_A(f)$ (The Solid)};
+\end{tikzpicture}
+\end{center}
+
+% Jump to 13.42
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{13}
+\setcounter{theorem}{41} 
+
+\begin{theorem}[Riemann Integral as Jordan Measure]
+Let $A \subset \mathbb{R}^n$ be a set. A function $f: A \to [0, \infty)$ is Riemann integrable if and only if the hypograph $\Gamma_A(f)$ is Jordan measurable. In such a case,
+$\int_A f = \mu_{n+1}(\Gamma_A(f))$.
+\end{theorem}
+
+% Restore
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+\subsection{Normal Domains and Fubini's Theorem}
+
+\begin{theorem*}[Normal Domains / Projectable Regions]
+There are two primary ways to slice a 2D region $A \subset \mathbb{R}^2$:
+\begin{enumerate}
+    \item \textbf{Type I (x-normal):} bounded left/right by constants $a, b$, and top/bottom by functions of $x$.
+    \item \textbf{Type II (y-normal):} bounded bottom/top by constants $c, d$, and left/right by functions of $y$.
+\end{enumerate}
+\end{theorem*}
+
+% --- DUAL-PURPOSE TIKZ 7 & 8: NORMAL DOMAINS ---
+% --- REVISED TIKZ 7 & 8: NORMAL DOMAINS ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    
+    % TYPE I
+    \begin{scope}[xshift=0cm]
+        \node at (2, 3.5) {\textbf{Type I (x-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (1, 0) node[below] {$a$} -- (1, 2.5);
+        \draw[dotted, very thick] (3, 0) node[below] {$b$} -- (3, 2.5);
+        
+        \fill[pattern=north west lines, pattern color=orange!80] 
+            (1, {0.3*sin(1*100) + 1}) -- plot[domain=1:3] (\x, {-0.2*(\x-2)*(\x-2) + 2.5}) -- (3, {0.3*sin(3*100) + 1}) -- plot[domain=3:1] (\x, {0.3*sin(\x*100) + 1}) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid, domain=1:3] plot (\x, {0.3*sin(\x*100) + 1}); 
+        \draw[very thick, red!80, dashed, domain=1:3] plot (\x, {-0.2*(\x-2)*(\x-2) + 2.5}); 
+        
+        % Labels pushed safely to the right side of the bound 'b'
+        \node[right, blue!80!black] at (3.1, 0.9) {$y = g_1(x)$};
+        \node[right, red!80] at (3.1, 2.3) {$y = g_2(x)$};
+        
+        \draw[->, very thick, green!50!black] (2, {0.3*sin(2*100) + 1}) -- (2, {-0.2*(2-2)*(2-2) + 2.5}) node[midway, right, text=black] {slice};
+    \end{scope}
+
+    % TYPE II
+    \begin{scope}[xshift=7cm]
+        \node at (2, 3.5) {\textbf{Type II (y-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (0, 0.5) node[left] {$c$} -- (3.5, 0.5);
+        \draw[dotted, very thick] (0, 2.5) node[left] {$d$} -- (3.5, 2.5);
+        
+        \fill[pattern=horizontal lines, pattern color=orange!80] 
+            (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5) -- (2.8, 2.5) .. controls (3.5, 1.5) .. (3, 0.5) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid] (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5); 
+        \draw[very thick, red!80, dashed] (3, 0.5) .. controls (3.5, 1.5) .. (2.8, 2.5); 
+        
+        % Labels pushed safely below the bound 'c'
+        \node[below, blue!80!black] at (1, 0.6) {$x = h_1(y)$};
+        \node[below, red!80] at (3.5, 0.6) {$x = h_2(y)$};
+        
+        \draw[->, very thick, green!50!black] (0.7, 1.5) -- (3.3, 1.5) node[midway, above, text=black] {slice};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{theorem*}[Fubini's Theorem for Normal Domains]
+For a Type I normal domain, the double integral can be evaluated as an iterated integral:
+\[
+\iint_A f(x, y) \, dA = \int_a^b \left[ \int_{g_1(x)}^{g_2(x)} f(x, y) \, dy \right] dx.
+\]
+If $A$ is Type II, integrate $dx$ first, then $dy$ on the outside. \textbf{The outermost integral bounds must always be constants!}
+\end{theorem*}
+
+
+% ==========================================
+% CHAPTER: CHANGE OF VARIABLES
+% ==========================================
+\section{Change of Variables}
+
+When an integral is too hard to solve in Cartesian coordinates, we distort the space using a transformation mapping $\Phi$.
+
+% Jump to 13.44
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+\setcounter{section}{13}
+\setcounter{theorem}{43} 
+
+\begin{theorem}[Change of Variables Formula]
+Suppose $U, V \subset \mathbb{R}^n$ are open sets and $\Phi : U \to V$ is a $C^1$-diffeomorphism. If $A \subset U$ is a Jordan measurable set, then
+\[
+\int_{\Phi(A)} f(x) \, dx = \int_A f(\Phi(y)) |\det J\Phi(y)| \, dy.
+\]
+\end{theorem}
+
+% Jump to 13.45-47
+\setcounter{theorem}{44} 
+
+\begin{theorem}[Standard Coordinates]
+The three standard $C^\infty$-diffeomorphisms and their Jacobians are:
+\begin{itemize}
+    \item \textbf{Polar:} $\Phi(r, \theta) = (r\cos\theta, r\sin\theta)^T$. Jacobian: $r$.
+    \item \textbf{Cylindrical:} $\Phi(r, \theta, z) = (r\cos\theta, r\sin\theta, z)^T$. Jacobian: $r$.
+    \item \textbf{Spherical:} $\Phi(r, \theta, \varphi) = (r\sin\theta\cos\varphi, r\sin\theta\sin\varphi, r\cos\theta)^T$. Jacobian: $r^2\sin\theta$.
+\end{itemize}
+\end{theorem}
+
+% Restore
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+
+% --- REVISED TIKZ 2: PUSHFORWARD DIFFERENTIAL ---
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+    % Left side: Domain V 
+    \draw[very thick, pattern=dots, pattern color=gray!60] (-5, -1) rectangle (-2, 2.0);
+    \node[fill=white, inner sep=1pt] at (-3.5, -0.5) {$V \subset \mathbb{R}^2$};
+    
+    % Point x
+    \coordinate (X) at (-4, 0.5);
+    \filldraw (X) circle (1.5pt) node[below left] {$x$};
+    
+    % Basis Vectors
+    \draw[->, very thick, red!80!black, solid] (X) -- ++(1, 0) node[right] {$e_1$};
+    \draw[->, very thick, blue!80!black, dashed] (X) -- ++(0, 1) node[above] {$e_2$};
+    
+    \draw[->, thick, bend left=30] (-2.2, 1.5) to node[above] {$\phi$ (Parameterization)} (0.2, 1.8);
+    
+    % Right side: Sphere 
+    \draw[very thick] (3,0) circle (2);
+    \draw[dashed, thin] (1,0) arc (180:0:2 and 0.6);
+    \draw[very thick] (5,0) arc (0:-180:2 and 0.6);
+    \node at (2.0, -1.0) {$M \subset \mathbb{R}^3$};
+    
+    \coordinate (P) at (1.8, 1.75);
+    
+    % Tangent plane
+    \draw[pattern=north west lines, pattern color=blue!60, draw=blue!60!black, very thick] 
+        (0.2, 0.8) -- (2.8, 1.1) -- (3.4, 2.7) -- (0.8, 2.4) -- cycle;
+        
+    \node[blue!80!black, right] at (2.4, 0.9) {$T_p M = D\phi_x(\mathbb{R}^2)$};
+    \filldraw (P) circle (1.5pt) node[below left, xshift=-2pt] {$\phantom{...}p = \phi(x)$};
+    
+    % Pushforward vectors (Moved text outside the patterned plane)
+    \draw[->, very thick, red!80!black, solid] (P) -- ++(1.3, 0.26) node[right] {$\phantom{....}\partial_1\phi = D\phi_x(e_1)$};
+    \draw[->, very thick, blue!80!black, dashed] (P) -- ++(0.7, 0.93) node[above] {$\partial_2\phi = D\phi_x(e_2)$};
+    \draw[->, very thick, green!50!black, dotted] (P) -- ++(-0.8, 1.16) node[left] {$\vec{n}$};
+
+\end{tikzpicture}
+\end{center}
+
+% --- REVISED TIKZ 7 & 8: NORMAL DOMAINS ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    
+    % TYPE I
+    \begin{scope}[xshift=0cm]
+        \node at (2, 3.5) {\textbf{Type I (x-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (1, 0) node[below] {$a$} -- (1, 2.5);
+        \draw[dotted, very thick] (3, 0) node[below] {$b$} -- (3, 2.5);
+        
+        \fill[pattern=north west lines, pattern color=orange!80] 
+            (1, {0.3*sin(1*100) + 1}) -- plot[domain=1:3] (\x, {-0.2*(\x-2)*(\x-2) + 2.5}) -- (3, {0.3*sin(3*100) + 1}) -- plot[domain=3:1] (\x, {0.3*sin(\x*100) + 1}) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid, domain=1:3] plot (\x, {0.3*sin(\x*100) + 1}); 
+        \draw[very thick, red!80, dashed, domain=1:3] plot (\x, {-0.2*(\x-2)*(\x-2) + 2.5}); 
+        
+        % Labels pushed safely to the right side of the bound 'b'
+        \node[right, blue!80!black] at (3.1, 0.9) {$y = g_1(x)$};
+        \node[right, red!80] at (3.1, 2.3) {$y = g_2(x)$};
+        
+        \draw[->, very thick, green!50!black] (2, {0.3*sin(2*100) + 1}) -- (2, {-0.2*(2-2)*(2-2) + 2.5}) node[midway, right, text=black] {slice};
+    \end{scope}
+
+    % TYPE II
+    \begin{scope}[xshift=7cm]
+        \node at (2, 3.5) {\textbf{Type II (y-normal)}};
+        \draw[->, thin] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thin] (0, -0.5) -- (0, 3) node[above] {$y$};
+        
+        \draw[dotted, very thick] (0, 0.5) node[left] {$c$} -- (3.5, 0.5);
+        \draw[dotted, very thick] (0, 2.5) node[left] {$d$} -- (3.5, 2.5);
+        
+        \fill[pattern=horizontal lines, pattern color=orange!80] 
+            (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5) -- (2.8, 2.5) .. controls (3.5, 1.5) .. (3, 0.5) -- cycle;
+            
+        \draw[very thick, blue!80!black, solid] (1, 0.5) .. controls (0.5, 1.5) .. (1.2, 2.5); 
+        \draw[very thick, red!80, dashed] (3, 0.5) .. controls (3.5, 1.5) .. (2.8, 2.5); 
+        
+        % Labels pushed safely below the bound 'c'
+        \node[below, blue!80!black] at (1, 0.6) {$x = h_1(y)$};
+        \node[below, red!80] at (3.5, 0.6) {$x = h_2(y)$};
+        
+        \draw[->, very thick, green!50!black] (0.7, 1.5) -- (3.3, 1.5) node[midway, above, text=black] {slice};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+% --- REVISED TIKZ 9: SWITCHING BOUNDS ---
+\begin{center}
+\begin{tikzpicture}[scale=2.8] % Scaled up slightly for clarity
+    % Axes
+    \draw[->, thick] (-0.2, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, thick] (0, -0.2) -- (0, 1.5) node[above] {$y$};
+    
+    % Domain
+    \fill[pattern=north east lines, pattern color=gray!80] (0,0) -- (1,0) -- (1,1) -- cycle;
+    \draw[very thick, blue!80!black, solid] (0,0) -- (1,1) node[midway, above left, xshift=-2pt, yshift=-2pt] {$y=x$};
+    \draw[very thick, dotted] (1,0) node[below] {$1$} -- (1,1);
+    \draw[very thick, dotted] (0,1) node[left] {$1$} -- (1,1);
+    
+    % Original Slicing: Label moved completely outside to the right
+    \draw[->, very thick, red!80!black, dashed] (0.3, 0.3) -- (1.0, 0.3);
+    \node[right, red!80!black] at (1.05, 0.3) {Original: slice $dx$};
+    
+    % New Slicing: Label moved completely outside to the top
+    \draw[->, very thick, green!50!black, solid] (0.7, 0) -- (0.7, 0.7);
+    \node[above, green!50!black, align=center] at (0.4, 0.75) {New: slice $dy$};
+\end{tikzpicture}
+\end{center}
+
