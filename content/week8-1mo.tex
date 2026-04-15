@@ -639,3 +639,44 @@ The three standard $C^\infty$-diffeomorphisms and their Jacobians are:
 \end{tikzpicture}
 \end{center}
 
+\begin{center}
+\begin{tikzpicture}[yscale=0.85] 
+    
+    \node[font=\Large\bfseries] at (6, 1.5) {E-Ink Palette V2: Vibrant \& Distinct};
+    \node[font=\small\itshape, text=gray] at (6, 0.7) {Keine Hue-Clashes, perfekte E-Ink Lesbarkeit};
+
+    % Kopfzeile
+    \node[font=\bfseries] at (0.5, -0.5) {Farbe};
+    \node[font=\bfseries, right] at (2.2, -0.5) {Code Name};
+    \node[font=\bfseries, right] at (5.5, -0.5) {Exakter Grauwert};
+    \node[font=\bfseries, right] at (8.5, -0.5) {Abstand zur Vorfarbe};
+
+    % Hilfsmakro (KORRIGIERT: Nimmt jetzt exakt 4 Argumente)
+    \newcommand{\paletterow}[4]{
+        \draw[line width=12pt, #1] (0, #2) -- (2, #2);
+        \node[right, font=\sffamily] at (2.2, #2) {\textbf{#1}};
+        \node[right, font=\ttfamily] at (5.5, #2) {#3};
+        \node[right, font=\small, text=gray] at (8.5, #2) {#4};
+    }
+
+    \paletterow{eBlack}{-1.5}{00.0\%}{--}
+    \paletterow{eMediumBlue}{-2.5}{09.2\%}{+ 9.2\%}
+    \paletterow{eDarkRed}{-3.5}{16.3\%}{+ 7.1\%}
+    \paletterow{eDarkGreen}{-4.5}{23.0\%}{+ 6.7\%}
+    \paletterow{eSaddleBrown}{-5.5}{33.0\%}{+ 10.0\%}
+    \paletterow{eDarkCyan}{-6.5}{38.2\%}{+ 5.2\%}
+    \paletterow{eOlive}{-7.5}{44.5\%}{+ 6.3\%}
+    \paletterow{eMediumOrchid}{-8.5}{50.8\%}{+ 6.3\%}
+    \paletterow{ePaleVioletRed}{-9.5}{58.0\%}{+ 7.2\%}
+    \paletterow{eSpringGreen}{-10.5}{64.4\%}{+ 6.4\%}
+    \paletterow{eSandyBrown}{-11.5}{70.7\%}{+ 6.3\%}
+    \paletterow{eSilver}{-12.5}{75.3\%}{+ 4.6\%}
+    \paletterow{eGold}{-13.5}{79.4\%}{+ 4.1\%}  % use for orange
+    \paletterow{eKhaki}{-14.5}{85.5\%}{+ 6.1\%}
+    \paletterow{eMistyRose}{-15.5}{91.9\%}{+ 6.4\%}
+
+    % Rahmen
+    \draw[thick, gray!40, rounded corners] (-0.5, 0.5) rectangle (12.0, -16.5);
+
+\end{tikzpicture}
+\end{center}
