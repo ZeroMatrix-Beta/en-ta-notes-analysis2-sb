@@ -1,0 +1,255 @@
+
+\setcounter{section}{6} 
+
+\section{Submanifolds}
+
+\textcolor{eGray}{Recall: A $C^k$-diffeomorphism is a bijective function whose inverse is also $C^k$. It essentially acts as a perfectly smooth transformation that stretches and bends space without ever tearing it or creating sharp creases.}
+
+\begin{definition*}
+$M^m \subseteq \R^n$ is a $C^k$, $m$-dimensional \emph{submanifold} of $\R^n$ if for any point $p \in M$ there are:
+\begin{itemize}
+    \item an \emph{open} neighborhood $U \subseteq \R^n$ of $p$
+    \item an \emph{open} neighborhood $V \subseteq \R^n$ of $0$
+    \item a $C^k$-diffeomorphism $\Phi: U \to V$ with $\Phi(p) = 0$ \textcolor{eGray}{(the submanifold chart)}
+\end{itemize}
+such that
+\[ \Phi(U \cap M) = (\R^m \times \set{0}) \cap V = \set{x \in V : x_{m+1} = \dots = x_n = 0} \]
+\end{definition*}
+
+\gemininote{The intuition here is beautifully simple: No matter how curved or twisted $M$ looks in the big space $\R^n$, if you zoom in close enough to a point $p$ (inside the window $U$), you can find a magical map $\Phi$ that completely \qt{irons out} the wrinkles. It flattens the manifold $M$ so it perfectly aligns with the standard flat coordinate axes of $\R^m$.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    % U and M
+    \draw[eDarkGray, dashed] (-1, 0) ellipse (1.5 and 1);
+    \node[eDarkGray] at (-1, 1.2) {$U$};
+    \draw[eMediumBlue] (-2.2, -0.2) to[out=20, in=160] (0.2, 0.2);
+    \node[eMediumBlue] at (-1.8, -0.4) {$M$};
+    \fill[eSaddleBrown] (-1, 0.05) circle (1.5pt) node[below] {$p$};
+
+    % Phi Arrow
+    \draw[->, eDarkRed] (0.8, 0) -- node[above] {$\Phi$} (2.2, 0);
+
+    % V and R^m
+    \draw[eDarkGray, dashed] (4, 0) ellipse (1.5 and 1);
+    \node[eDarkGray] at (4, 1.2) {$V$};
+    \draw[eMediumBlue] (2.2, 0) -- (5.8, 0);
+    \node[eMediumBlue] at (5.2, -0.2) {$\R^m$};
+    \fill[eSaddleBrown] (4, 0) circle (1.5pt) node[below] {$0$};
+    \draw[->, eBlack] (4, -1) -- (4, 1) node[right] {$\R^{n-m}$};
+\end{tikzpicture}
+\end{center}
+
+Finding such a chart $\Phi$ manually can be extremely difficult. It is often much easier to prove a set is a submanifold by using one of the two standard perspectives: \emph{Implicit Representation} (defining the manifold by what it restricts) or \emph{Local Parametrization} (defining the manifold by building it).
+
+\subsection*{The Implicit Perspective: Cutting down space}
+
+To separate the implicit definition from the parametric one, we will use \textcolor{eDarkGreen}{\textbf{green for the implicit map $F$}} and \textcolor{eMediumBlue}{\textbf{blue for the parametric map $f$}}.
+
+\begin{theorem*}[Regular value theorem]
+Suppose $U \subseteq \R^n$ is \emph{open}, $\textcolor{eDarkGreen}{F}: U \to \R^l$ is $C^k$, and $y \in \textcolor{eDarkGreen}{F}(U)$. If the differential
+\[ D\textcolor{eDarkGreen}{F}_x: \R^n \to \R^l \]
+is surjective (i.e. $J\textcolor{eDarkGreen}{F}(x)$ has full rank) for all $x \in \textcolor{eDarkGreen}{F}^{-1}\set{y} = \set{\bar{x} \in U : \textcolor{eDarkGreen}{F}(\bar{x}) = y}$, then the level set $\textcolor{eDarkGreen}{F}^{-1}\set{y}$ is a $C^k$ submanifold with dimension $n-l$.
+\end{theorem*}
+
+\gemininote{Why must it be surjective? Surjectivity of the derivative means the constraints defined by $\textcolor{eDarkGreen}{F}$ are truly independent and don't collapse on each other. If the rank dropped, the manifold might have sharp corners, self-intersections, or singular points where it's no longer \qt{smooth}.}
+
+\begin{example*}
+Consider $\textcolor{eDarkGreen}{F}: \R^2 \to \R$, given by $(x,y) \mapsto x^2 + y^2$. \\
+Then the Jacobian is $J\textcolor{eDarkGreen}{F}(x,y) = (2x, 2y)$. \\
+This matrix (a row vector here) has full rank (rank 1) as long as it isn't the zero vector. So it has full rank if $x \ne 0$ or $y \ne 0$, i.e., $\forall (x,y) \in \R^2 \setminus \set{0}$.
+
+For any $R > 0$, the origin $(0,0) \notin \textcolor{eDarkGreen}{F}^{-1}\set{R^2}$. Therefore, the level set
+\[ \textcolor{eDarkGreen}{F}^{-1}\set{R^2} = \set{(x,y) \in \R^2 : x^2 + y^2 = R^2} \]
+is guaranteed to be a smooth submanifold of dimension $2 - 1 = 1$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    \draw[->, eBlack] (-1.5, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -1.5) -- (0, 1.5) node[above] {$y$};
+    \draw[eMediumOrchid] (0,0) circle (1cm);
+    \draw[eDarkRed, -] (0,0) -- node[below right] {$R$} (45:1cm);
+\end{tikzpicture}
+\end{center}
+
+Similarly, $\set{x \in \R^n : \abs{x}^2 = R^2}$ is a submanifold of dimension $n-1$ for $R > 0$. \\
+\textcolor{eGray}{This is the classical $n$-sphere of radius $R$.} 
+\geminiwarning{Kurzer Terminologie-Check: Eine Sphäre, die im \(\R^n\) lebt, ist streng genommen eine \((n-1)\)-dimensionale Fläche. Topologen nennen sie daher meist die \((n-1)\)-Sphäre, notiert als \(S^{n-1}\). Hier in den Notizen wird sie informell die \(n\)-Sphäre genannt (basierend auf der Dimension des Umgebungsraumes).}
+\end{example*}
+
+\subsection*{The Connection to Lagrangian Optimization}
+
+Recall how we build the Lagrangian $L = f - \sum_{i=1}^k \lambda_i g_i$ when optimizing a function $f|_M$ for $f \in C^1(\R^n, \R)$. The constraint set $M$ is defined as:
+\[ g_1, \dots, g_k: U \to \R, \quad M := \set{x \in \R^n : g_1(x) = \dots = g_k(x) = 0} \]
+For the method of Lagrange multipliers to work, we require that the gradients $(\nabla g_1, \dots, \nabla g_k)$ are linearly independent $\forall x \in M$.
+
+Let's package all these constraints into a single implicit map $\textcolor{eDarkGreen}{g}: \R^n \to \R^k$, where $x \mapsto (g_1(x), \dots, g_k(x))$. The requirement that the gradients are linearly independent means exactly that the Jacobian:
+\[ J\textcolor{eDarkGreen}{g}(x) = \begin{pmatrix} \longleftarrow & \nabla g_1(x) & \longrightarrow \\ & \vdots & \\ \longleftarrow & \nabla g_k(x) & \longrightarrow \end{pmatrix} \]
+has full rank! Therefore, the constraint surface $M = \textcolor{eDarkGreen}{g}^{-1}\set{0}$ is automatically an $(n-k)$-dimensional submanifold by the regular value theorem!
+
+\gemininote{Die Notizen erwähnen hier \qt{ergo $k \le n$}. Why is this so crucial? Think about what happens if you add constraints. In a 3D room ($n=3$), one constraint ($k=1$) restricts you to a 2D floor. Two constraints ($k=2$) restrict you to a 1D line (where two floors intersect). Three constraints ($k=3$) restrict you to a 0D point. If you impose $k=4$ independent constraints in a 3D room, it's physically impossible—the set of solutions is empty! The rank of a matrix can never exceed its number of columns, so for $J\textcolor{eDarkGreen}{g}$ to have full row rank $k$, we mathematically must have $k \le n$.}
+
+
+\subsection*{The Parametric Perspective: Building up space}
+
+\begin{theorem*}[Local parametrization]
+Let $M \subseteq \R^n$. If $\forall p \in M$ there exist an \emph{open} neighborhood $V \subseteq \R^n$ of $p$, an \emph{open} set $U \subseteq \R^m$ and a $C^k$ map $f: U \to V \cap M$ such that:
+\begin{enumerate}
+    \item $Df_x: \R^m \to \R^n$ is injective $\forall x \in U$ \textcolor{eGray}{(the map doesn't crush dimensions together)}
+    \item $f$ is a homeomorphism \textcolor{eGray}{(bijective, continuous, and $f^{-1}$ is continuous, ensuring no self-intersections)}
+\end{enumerate}
+then $M$ is a $C^k$ submanifold with dimension $m$.
+\end{theorem*}
+
+\begin{example*}[Parabola]
+Let $P = \set{(x,t) \in \R^n \times \R : t = \abs{x}^2}$ \textcolor{eGray}{(the $n$-parabola)}.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    \draw[->, eBlack] (-1.5, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -0.5) -- (0, 1.5) node[above] {$t$};
+    \draw[eMediumBlue, domain=-1.2:1.2, samples=50] plot (\x, {\x*\x});
+\end{tikzpicture}
+\end{center}
+
+We could define this implicitly and use the regular value theorem, but let's build it parametrically. Consider the map:
+\[ f: \R^n \to \R^n \times \R, \quad x \mapsto (x, \abs{x}^2) \]
+We check our conditions:
+\begin{enumerate}
+    \item $Jf(x) = \begin{pmatrix} Id_{n \times n} \\ 2x^\top \end{pmatrix}$ clearly has full column rank, so the derivative is injective.
+    \item $f$ is bijective onto its image and continuous. Its inverse is the canonical projection $\pi: f(U) \to \R^n$, mapping $(x,t) \mapsto x$, which is trivially continuous.
+    \item $f(\R^n) = P$.
+\end{enumerate}
+So $P$ is an $n$-dimensional submanifold.
+\end{example*}
+
+\textcolor{eGray}{Note: The graphical representation of a function (like plotting $y = h(x)$) is just a very common, equivalent special case of a local parametrization.}
+
+\begin{example*}[Alternative optimization technique]
+Let $f: \R^2 \to \R$, given by $(x,y) \mapsto 2x^2 + y^2 - x$. \\
+Let's find the extrema of $f|_{S^1}$ \emph{without} using Lagrange multipliers!
+
+Since $S^1$ is a 1-dimensional submanifold, we can just parametrize $S^1 = \set{(x,y) \in \R^2 : x^2 + y^2 = 1}$ using an angle $\theta$:
+\[ \begin{pmatrix} x(\theta) \\ y(\theta) \end{pmatrix} = \begin{pmatrix} \cos\theta \\ \sin\theta \end{pmatrix} \]
+We substitute this parametrization directly into our objective function:
+\begin{equation}
+    \begin{aligned}
+        f(\theta) &= f(x(\theta), y(\theta)) = 2\cos^2\theta + \sin^2\theta - \cos\theta \\
+        &= 2\cos^2\theta + (1 - \cos^2\theta) - \cos\theta \\
+        &= \cos^2\theta - \cos\theta + 1
+    \end{aligned}
+\end{equation}
+Now it's just a standard Analysis 1 problem! Setting the derivative to zero:
+\[ f'(\theta) = -2\cos\theta\sin\theta + \sin\theta = 0 \]
+Factoring out $\sin\theta$:
+\[ \sin\theta(1 - 2\cos\theta) = 0 \]
+This gives two cases where the product is zero:
+\begin{enumerate}
+    \item $\sin\theta = 0 \implies \theta_1 \in \set{0, \pi}$
+    \item $(1 - 2\cos\theta) = 0 \implies \cos\theta = \frac{1}{2} \implies \theta_2 \in \set{\frac{\pi}{3}, \frac{5\pi}{3}}$
+\end{enumerate}
+Plugging these angles back into our parametrization $(x,y) = (\cos\theta, \sin\theta)$, the extrema on the circle are located at:
+\begin{enumerate}
+    \item $(\cos\theta_1, \sin\theta_1) = (\pm 1, 0)$
+    \item $(\cos\theta_2, \sin\theta_2) = \left(\frac{1}{2}, \pm\frac{\sqrt{3}}{2}\right)$
+\end{enumerate}
+\end{example*}
+
+\hrulefill
+
+\section{Tangent and Normal space}
+
+Suppose $M^m \subseteq \R^n$ is a submanifold and $f: U \to f(U) \subseteq M$ is a local parametrization around some point $p \in f(U)$ with $f(q) = p$.
+
+The $n \times m$-matrix of partial derivatives
+\[ Jf(q) = \begin{pmatrix} | & & | \\ \partial_1 f(q) & \dots & \partial_m f(q) \\ | & & | \end{pmatrix} \]
+has full rank, meaning the column vectors $\partial_i f(q)$ are linearly independent. 
+
+\gemininote{Think of the vectors $\partial_i f(q)$ as the \qt{velocity vectors} you get if you walk along the grid lines of your parameter space $U$. Since they are linearly independent, they span a perfectly flat $m$-dimensional plane that grazes the manifold at $p$.}
+
+\begin{definition*}[Tangent space]
+For $M, f$ as above, the Tangent space of $M$ at $p \in M$ is the space spanned by these velocity vectors:
+\[ T_p M = \Span\set{\partial_1 f(q), \dots, \partial_m f(q)} = Df_q(\R^m) \]
+Remarkably, this space is completely independent of the specific parametrization $f$ you chose to use!
+\end{definition*}
+
+\begin{example*}
+We parametrize the upper hemisphere
+\[ S_+^2 = \set{(x,y,z) \in \R^3 : x^2 + y^2 + z^2 = 1, z > 0} \]
+graphically as a function of $x$ and $y$:
+\[ f(x,y) = \begin{pmatrix} x \\ y \\ \sqrt{1 - x^2 - y^2} \end{pmatrix} \]
+Let's determine the tangent space $T_{e_3} S_+^2$ at the \qt{North Pole}, where $e_3 = (0,0,1)$. This corresponds to the parameters $(x,y) = (0,0)$.
+
+First, we calculate the partial derivatives and evaluate them at the origin:
+\[ \partial_x f \Big|_{(x,y)=(0,0)} = \begin{pmatrix} 1 \\ 0 \\ \frac{-x}{\sqrt{1 - x^2 - y^2}} \end{pmatrix} \Bigg|_{(x,y)=(0,0)} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} =: e_1 \]
+\[ \partial_y f \Big|_{(x,y)=(0,0)} = \begin{pmatrix} 0 \\ 1 \\ \frac{-y}{\sqrt{1 - x^2 - y^2}} \end{pmatrix} \Bigg|_{(x,y)=(0,0)} = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} =: e_2 \]
+So, the tangent space at the North Pole is perfectly flat against the xy-plane:
+\[ T_{e_3} S_+^2 = T_{e_3} S^2 = \Span\set{e_1, e_2} = \R^2 \times \set{0} \]
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    % Sphere
+    \draw[eMediumBlue] (0,0) circle (1cm);
+    \draw[eMediumBlue, dashed] (1,0) arc (0:180:1cm and 0.3cm);
+    \draw[eMediumBlue] (1,0) arc (0:-180:1cm and 0.3cm);
+
+    % Tangent Plane
+    \draw[eDarkGreen] (-1.2, 1) -- (0.5, 0.7) -- (1.2, 1.2) -- (-0.5, 1.5) -- cycle;
+    \node[eDarkGreen] at (1.4, 1) {$T_{e_3} S^2$};
+
+    % Point e_3
+    \fill[eDarkGreen] (0,1) circle (1pt);
+\end{tikzpicture}
+\end{center}
+\end{example*}
+
+\subsection*{The Grand Synthesis: Tangent vs. Normal}
+
+Now, let's look at the beautiful relationship between our two perspectives. Suppose $\textcolor{eDarkGreen}{F}: U^n \to \R^{n-m}$ is an \emph{implicit representation} of a submanifold $M^m = \textcolor{eDarkGreen}{F}^{-1}\set{0}$, and $f: V^m \to U$ is a \emph{local parametrization} of that same manifold.
+
+Then, by definition of these two constructs, three things are true:
+\begin{enumerate}
+    \item $J\textcolor{eDarkGreen}{F}(x) = \begin{pmatrix} \longleftarrow & \nabla \textcolor{eDarkGreen}{F}_1(x) & \longrightarrow \\ & \vdots & \\ \longleftarrow & \nabla \textcolor{eDarkGreen}{F}_{n-m}(x) & \longrightarrow \end{pmatrix}$ has full rank. Thus, the gradients $\set{\nabla \textcolor{eDarkGreen}{F}_i(x)}_{i=1,\dots,n-m}$ are linearly independent.
+    \item $T_{f(q)} M = \Span\set{\partial_i f(q)}$ as we just discussed.
+    \item $\textcolor{eDarkGreen}{F}(f(x)) = 0 \quad \forall x \in V$. This is the crucial link: because the image of the parametrization $f$ lies entirely on the manifold, feeding $f(x)$ into the constraint equation $\textcolor{eDarkGreen}{F}$ must always output exactly zero!
+\end{enumerate}
+
+From point \textbf{c)}, we can apply the multivariable chain rule to see what happens to the derivatives:
+\[ J(\textcolor{eDarkGreen}{F} \circ f)(q) = J\textcolor{eDarkGreen}{F}(f(q)) \cdot Jf(q) = \begin{pmatrix} \longleftarrow & \nabla \textcolor{eDarkGreen}{F}_1(f(q)) & \longrightarrow \\ & \vdots & \\ \longleftarrow & \nabla \textcolor{eDarkGreen}{F}_{n-m}(f(q)) & \longrightarrow \end{pmatrix} \begin{pmatrix} | & & | \\ \partial_1 f(q) & \dots & \partial_m f(q) \\ | & & | \end{pmatrix} = 0 \]
+
+Now, look closely at what this matrix multiplication is actually doing \warning{(!!!)}:
+\[ (J\textcolor{eDarkGreen}{F}(f(q)) \cdot Jf(q))_{ij} = \langle \nabla \textcolor{eDarkGreen}{F}_i(f(q)), \partial_j f(q) \rangle = 0 \quad \forall i=1,\dots,n-m, \quad j=1,\dots,m \]
+
+Every single gradient vector of $\textcolor{eDarkGreen}{F}$ has a dot product of zero with every single tangent vector from $f$. So the vectors $\nabla \textcolor{eDarkGreen}{F}_i(f(q))$ are all strictly perpendicular (normal) to the tangent space $T_{f(q)} M$. 
+
+Since by point \textbf{a)}, we have exactly $n-m$ linearly independent vectors, and they are all perpendicular to our $m$-dimensional tangent plane, they perfectly span the remaining dimensions of $\R^n$. This leads us to define:
+
+\begin{definition*}[Normal space]
+Let $M^m \subseteq \R^n$ be a submanifold and $\textcolor{eDarkGreen}{F}: U^n \to \R^{n-m}$ an implicit representation where $M = \textcolor{eDarkGreen}{F}^{-1}\set{0}$.
+Then the normal space of $M$ at $p \in M$ is spanned by the gradients of the constraints:
+\[ N_p M := \Span\set{\nabla \textcolor{eDarkGreen}{F}_1(p), \dots, \nabla \textcolor{eDarkGreen}{F}_{n-m}(p)} \]
+\end{definition*}
+
+\begin{example*}
+Let's represent the sphere $S^2$ implicitly:
+\[ S^2 = \textcolor{eDarkGreen}{F}^{-1}\set{1} = \set{(x,y,z) \in \R^3 : \textcolor{eDarkGreen}{F}(x,y,z) = 1} \]
+where the constraint is $\textcolor{eDarkGreen}{F}(x,y,z) = x^2 + y^2 + z^2$.
+
+We determine the normal space $N_{e_3} S^2$ at the North Pole $e_3 = (0,0,1)$:
+\[ \nabla \textcolor{eDarkGreen}{F}(0,0,1) = (2x, 2y, 2z) \Big|_{(x,y,z)=(0,0,1)} = (0,0,2) = 2e_3 \]
+So, the normal space points straight up along the z-axis:
+\[ N_{e_3} S^2 = \Span\set{e_3} = \set{0} \times \set{0} \times \R \]
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    % Sphere
+    \draw[eMediumBlue] (0,0) circle (1cm);
+    \draw[eMediumBlue, dashed] (1,0) arc (0:180:1cm and 0.3cm);
+    \draw[eMediumBlue] (1,0) arc (0:-180:1cm and 0.3cm);
+
+    % Normal Vector
+    \draw[->, eSaddleBrown] (0,0.8) -- (0, 1.8) node[right] {$N_{e_3} S^2$};
+    \fill[eSaddleBrown] (0,1) circle (1.5pt) node[below right] {$e_3$};
+\end{tikzpicture}
+\end{center}
+\end{example*}

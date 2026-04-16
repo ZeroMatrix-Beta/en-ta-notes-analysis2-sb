@@ -1,0 +1,106 @@
+
+\section{Sequences and Convergence}
+
+A sequence $(x_n)_{n=0}^\infty$ in a metric space $(X, d)$ is formally a function $x: \N \to X$. We say that $(x_n)$ \textbf{converges} to $x \in X$ if:
+\[ \forall \eps > 0, \exists N \in \N \text{ s.t. } d(x_n, x) < \eps \quad \forall n \ge N \]
+
+\subsection*{The Big Connection Proposition}
+Topological properties and sequences go hand-in-hand:
+\begin{enumerate}
+    \item $U \subseteq X$ is \textbf{open} $\iff$ for every sequence in $X$ with a limit in $U$, the sequence eventually lies inside $U$.
+    \item $A \subseteq X$ is \textbf{closed} $\iff$ every convergent sequence in $A$ has its limit in $A$.
+\end{enumerate}
+
+\subsection*{\warning{Watch out! A Common Misconception!}}
+Let's look at the standard Euclidean metric space $\R^2$. 
+We know $[0,1]^2$ is closed and $(0,1)^2$ is open. What about $[0,1] \times (0,1)$? It is neither open nor closed in $\R^2$.
+
+\textcolor{eDarkRed}{But...} what if our \textit{entire universe} (our metric space $X$) is strictly just $[0,1]^2$? 
+In the subspace $X = [0,1]^2$, the set $[0,1]^2$ is actually \emph{open}! 
+
+\textcolor{eDarkCyan}{Why?} Because the full space $X$ is always open. If you take a point on the boundary, the open ball $B_\eps(x)$ only consists of points \textcolor{eSaddleBrown}{that actually exist in $X$}. It doesn't bleed out into $\R^2$ because $\R^2$ doesn't exist to this metric space!
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    % Misconception visual
+    \draw[->] (-0.5, 0) -- (1.5, 0) node[right] {$x_1$};
+    \draw[->] (0, -0.5) -- (0, 1.5) node[above] {$x_2$};
+    
+    % The space [0,1]^2
+    \draw[eMediumBlue, fill=eMediumBlue!10] (0,0) rectangle (1,1);
+    \node[eMediumBlue] at (0.5, 0.5) {$X = [0,1]^2$};
+    
+    % Point on boundary and its ball
+    \coordinate (P) at (1, 0.3);
+    \fill[eDarkRed] (P) circle (1.5pt) node[right] {$x$};
+    \draw[eDarkRed, dashed] (P) circle (0.3cm);
+    
+    % Highlighting the part of the ball that is IN X
+    \begin{scope}
+        \clip (0,0) rectangle (1,1);
+        \fill[eDarkRed!40] (P) circle (0.3cm);
+    \end{scope}
+    
+    \node[eDarkRed, align=left, anchor=west] at (1.5, 0.5) {The $\eps$-ball in $X$ is \\ strictly the shaded region! \\ $B_\eps(x) \subseteq X$ is perfectly valid.};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercise*}
+\begin{enumerate}
+    \item Write down the definition of convergence of a sequence $(f_n)_{n=0}^\infty$ to $f$ in the metric space $X$ of bounded functions $[0,1] \to \R$ with the supremum metric.
+    \item You know the resulting expression from Analysis 1. What is it called?
+    \item Use the fact that $C^0([0,1]) \subseteq X$ is closed and the previous proposition of \qt{sequentially closed} to conclude a big result from Analysis 1.
+\end{enumerate}
+\end{exercise*}
+
+\begin{solution}
+\textcolor{eGray}{(Optional)}
+\begin{enumerate}
+    \item $\forall \eps > 0 \, \exists N \in \N$: $\sup_{x \in [0,1]} \abs{f_n(x) - f(x)} < \eps \quad \forall n \ge N$.
+    \item This is \textcolor{eDarkGreen}{uniform convergence}!
+    \item $C^0([0,1])$ is closed in the space of bounded functions with the supremum metric. 
+    
+    \textcolor{eSaddleBrown}{Proof:} Let $f \in X \setminus C^0([0,1])$, i.e. $f:[0,1] \to \R$ is bounded and has at least one discontinuity at a point $x_0 \in [0,1]$. That is, we find $\eps > 0$ s.t. $\forall \delta > 0 \, \exists y \in (x_0 - \delta, x_0 + \delta)$ with $\abs{f(x_0) - f(y)} \ge \eps$.
+    
+    Then the ball in $X$:
+    \[ B_{\eps/3}(f) = \set{g \in X : \sup_{x \in [0,1]} \abs{f(x) - g(x)} < \frac{\eps}{3}} \]
+    
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, very thick]
+        % Axes
+        \draw[->, thick, eBlack] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thick, eBlack] (0, -0.5) -- (0, 3) node[above] {$y$};
+        \node[below left, eBlack] at (0,0) {$0$};
+        \draw[thick, eBlack] (3.5, 0.1) -- (3.5, -0.1) node[below] {$1$};
+        
+        % Function curves (f)
+        \draw[eMediumBlue] (0, 0.5) to[out=0, in=180] (1.5, 0.2);
+        \draw[eMediumBlue] (1.5, 1.5) to[out=0, in=180] (3.5, 2.5);
+        
+        % Discontinuity points
+        \fill[eMediumBlue] (1.5, 1.5) circle (1.5pt);
+        \fill[eMediumBlue, fill=white, draw=eMediumBlue, thick] (1.5, 0.2) circle (1.5pt);
+        
+        % Jump epsilon arrow
+        \draw[<->, eSaddleBrown] (1.5, 0.3) -- (1.5, 1.4) node[midway, right] {$\eps$};
+        
+        % Tubes (epsilon/3)
+        \draw[eDarkRed, dashed] (0, 0.8) to[out=0, in=180] (1.5, 0.5);
+        \draw[eDarkRed, dashed] (0, 0.2) to[out=0, in=180] (1.5, -0.1);
+        \draw[eDarkRed, dashed] (1.5, 1.8) to[out=0, in=180] (3.5, 2.8);
+        \draw[eDarkRed, dashed] (1.5, 1.2) to[out=0, in=180] (3.5, 2.2);
+        
+        % Epsilon/3 label arrow
+        \draw[<->, eDarkRed] (2.5, 2.05) -- (2.5, 2.35) node[midway, right] {$\frac{\eps}{3}$};
+        \node[eMediumBlue] at (3.7, 2.5) {$f$};
+    \end{tikzpicture}
+    \end{center}
+    
+    is contained in $X \setminus C^0([0,1])$. Given this fact, the \qt{sequentially closed} proposition ensures that the uniform limit $f$ of $(f_n)_{n=0}^\infty$ in $C^0([0,1])$ is also in $C^0([0,1])$ i.e. continuous, given that $f:[0,1] \to \R$ is bounded.
+    
+    This is the case, since $f_N$ is bounded, and with $\eps = 1$, we find $N \in \N$ s.t.
+    \[ \sup_{x \in [0,1]} \abs{f_N(x) - f(x)} < 1 \implies f \text{ is bounded.} \]
+    
+    $B_\eps(f)$ in the space of bounded functions on $[0,1]$ is the \qt{$\eps$-tube} around $f$.
+\end{enumerate}
+\end{solution}

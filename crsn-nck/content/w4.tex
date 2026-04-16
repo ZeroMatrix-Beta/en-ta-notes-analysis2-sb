@@ -1,0 +1,200 @@
+\setcounter{section}{3} % Set to appropriate section number for Week 4
+
+\section{The Differential}
+
+To understand how derivatives work in multiple dimensions, let's first recall the 1-dimensional case from Analysis 1. For a function $f: \R \to \R$ that is differentiable at $x_0 \in \R$, we can write its linear approximation as:
+\[ f(x_0 + h) = f(x_0) + f'(x_0)h + o(h) \]
+This is perfectly equivalent to the classic limit definition:
+\[ \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h} = f'(x_0) \quad \iff \quad \lim_{h \to 0} \frac{\abs{f(x_0 + h) - f(x_0) - f'(x_0)h}}{\abs{h}} = 0 \]
+
+Now, let's upgrade to a multivariable function $F: \R^n \to \R^m$. We can no longer just multiply by a scalar slope $f'(x_0)$. Instead, the derivative must be a \textbf{linear map} that transforms an $n$-dimensional step $h$ into an $m$-dimensional change in output!
+
+\begin{definition*}[Differentiability]
+We say that $F: \R^n \to \R^m$ (or $F: U \to \R^m$ for an open subset $U \subseteq \R^n$) is \textbf{differentiable} at $x_0$ if there exists a linear map $DF_{x_0}: \R^n \to \R^m$ such that:
+\[ F(x_0 + h) = F(x_0) + DF_{x_0}(h) + o(\abs{h}) \]
+Or, written as a limit:
+\[ \lim_{h \to 0} \frac{\abs{F(x_0 + h) - F(x_0) - DF_{x_0}(h)}}{\abs{h}} = 0 \]
+\end{definition*}
+
+\gemininote{Notice the absolute value bars in the denominator! We divide by the \emph{length} of the vector $h$. If you look closely at the term $\frac{F(x_0 + h) - F(x_0)}{\abs{h}}$, you can see that as $h \to 0$, this evaluates the rate of change along a specific direction $\frac{h}{\abs{h}}$. This is intimately connected to the directional derivative!}
+
+\subsection*{The Jacobian Matrix}
+
+Since $DF_{x_0}: \R^n \to \R^m$ is a linear map, it can be represented by an $m \times n$ matrix—provided we fix a basis. In the standard basis of $\R^n$, this matrix is the famous \textbf{Jacobian matrix}:
+\[ DF_x \approx JF(x) = \begin{pmatrix} 
+\frac{\partial F_1}{\partial x_1} & \dots & \frac{\partial F_1}{\partial x_n} \\ 
+\vdots & \ddots & \vdots \\ 
+\frac{\partial F_m}{\partial x_1} & \dots & \frac{\partial F_m}{\partial x_n} 
+\end{pmatrix} \]
+
+Here, $F(x) = (F_1(x), \dots, F_m(x))^T$, and the $i$-th partial derivative is defined as taking the 1D derivative along the $i$-th standard basis vector $e_i$:
+\[ \partial_i F(x) = \lim_{s \to 0} \frac{F(x + se_i) - F(x)}{s} \]
+
+If $F$ is fully differentiable, the partial derivatives are simply the columns of the Jacobian, and we can compute them by applying the differential to the basis vectors:
+\[ \partial_i F(x) = DF_x(e_i) \]
+
+\geminiwarning{Crucial Trap: Partial derivatives can exist even if $F$ is NOT differentiable! Partial derivatives only check the grid lines (x-axis, y-axis). A function could be perfectly smooth along the axes but have a massive tear or crease diagonally. Full differentiability requires the linear approximation $DF_x$ to work from \emph{all} approach directions simultaneously.}
+
+\subsection*{Examples of Differentials}
+
+\begin{example*}[1. A Curve in 2D Space]
+Consider a path $\gamma: \R \to \R^2, t \mapsto \binom{\cos t}{\sin t}$. \\
+Let's find the differential at $t = \frac{\pi}{4}$. For a curve, the Jacobian is just a column vector (the velocity vector):
+\[ \gamma'\left(\frac{\pi}{4}\right) := D\gamma_{\pi/4} = \begin{pmatrix} \partial_t \gamma_1(\pi/4) \\ \partial_t \gamma_2(\pi/4) \end{pmatrix} = \begin{pmatrix} -\sin(\pi/4) \\ \cos(\pi/4) \end{pmatrix} = \begin{pmatrix} -1/\sqrt{2} \\ 1/\sqrt{2} \end{pmatrix} \]
+Using the approximation formula $F(x_0 + h) = F(x_0) + DF_{x_0}(h) + o(\abs{h})$:
+\[ \gamma\left(\frac{\pi}{4} + h\right) = \frac{1}{\sqrt{2}}\binom{1}{1} + \frac{h}{\sqrt{2}}\binom{-1}{1} + o(\abs{h}) \]
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    % Axes
+    \draw[->, eBlack] (-1.5, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -1.5) -- (0, 1.5) node[above] {$y$};
+    
+    % Circle
+    \draw[eMediumBlue] (0,0) circle (1cm);
+    
+    % Point at pi/4
+    \coordinate (P) at (0.707, 0.707);
+    \fill[eSaddleBrown] (P) circle (1.5pt) node[right, yshift=2mm] {$\gamma(\pi/4)$};
+    
+    % Tangent vector
+    \draw[->, eDarkGreen] (P) -- ++(-0.707, 0.707) node[above] {$D\gamma_{\pi/4} = \gamma'(\pi/4)$};
+\end{tikzpicture}
+\end{center}
+\textcolor{eGray}{Notice how the column vectors of the Jacobian are the partial derivatives. If we have a general direction vector $v = (v_1, \dots, v_n)^T$, the directional derivative is just the matrix-vector product: $\partial_v F(x) = DF_x(v) = JF(x)v = \sum_{i=1}^n v_i \frac{\partial F}{\partial x_i}$.}
+\end{example*}
+
+\begin{example*}[2. A Scalar Field]
+Consider $f: \R^3 \to \R$, given by $(x,y,z) \mapsto 2x^2 + y^2 + 3z^2 - 2xyz$. \\
+What is the differential $df(x,y,z)$? Since the output is 1D, the Jacobian is a row vector:
+\[ Jf(x,y,z) = \left( 4x - 2yz, \quad 2y - 2xz, \quad 6z - 2xy \right) \]
+Notice that this is exactly the transpose of the gradient!
+\[ Jf(x,y,z) = \left( \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}, \frac{\partial f}{\partial z} \right) = (\nabla f)^T \]
+\end{example*}
+
+\hrulefill
+
+\section{The Chain Rule}
+
+For differentiable functions $f: U \subseteq \R^n \to \R^m$ and $g: V \subseteq \R^m \to \R^l$, the differential of the composition is the composition of the differentials:
+\[ D(g \circ f)(x) = Dg(f(x)) \cdot Df(x) \]
+Since linear maps compose via matrix multiplication, this translates directly to their Jacobians:
+\[ J(g \circ f)(x) = Jg(f(x)) \cdot Jf(x) \]
+
+\begin{exercise*}
+Compute $J(g \circ f)$ for the following functions:
+\begin{itemize}
+    \item $f: \R^3 \to \R^2, \quad x \mapsto (x_1 x_2, \; x_2 + x_3)^T$
+    \item $g: \R^2 \to \R^2, \quad y \mapsto (e^{y_1}, \; y_1 y_2)^T$
+\end{itemize}
+\end{exercise*}
+
+\begin{solution}
+First, compute the individual Jacobians:
+\[ Jf(x) = \begin{pmatrix} x_2 & x_1 & 0 \\ 0 & 1 & 1 \end{pmatrix}, \quad Jg(y) = \begin{pmatrix} e^{y_1} & 0 \\ y_2 & y_1 \end{pmatrix} \]
+Before multiplying, we must evaluate $Jg$ at the point $y = f(x)$, so $y_1 = x_1 x_2$ and $y_2 = x_2 + x_3$:
+\[ Jg(f(x)) = \begin{pmatrix} e^{x_1 x_2} & 0 \\ x_2 + x_3 & x_1 x_2 \end{pmatrix} \]
+Now, multiply the matrices:
+\begin{equation}
+    \begin{aligned}
+        J(g \circ f)(x) &= \begin{pmatrix} e^{x_1 x_2} & 0 \\ x_2 + x_3 & x_1 x_2 \end{pmatrix} \begin{pmatrix} x_2 & x_1 & 0 \\ 0 & 1 & 1 \end{pmatrix} \\
+        &= \begin{pmatrix} x_2 e^{x_1 x_2} & x_1 e^{x_1 x_2} & 0 \\ x_2(x_2 + x_3) & x_1(x_2 + x_3) + x_1 x_2 & x_1 x_2 \end{pmatrix}
+    \end{aligned}
+\end{equation}
+\end{solution}
+
+\subsection*{Alternative: Directional Derivatives}
+Sometimes the differential is not easily expressed as a Jacobian matrix (e.g., when the vector space is the space of matrices). In such cases, it is extremely convenient to use the formula for directional derivatives:
+\[ DF_{x_0}(v) = \partial_v F(x_0) = \frac{d}{ds}\bigg|_{s=0} F(x_0 + sv) \]
+\textcolor{eGray}{Note: The directional derivative $\partial_v F(x_0)$ can exist even if $F$ is not fully differentiable at $x_0$. However, if $DF_{x_0}$ exists, this formula is always valid and often much faster to compute!}
+
+\begin{exercise*}[Matrix Inner Products]
+We identify the space of real-valued matrices $\R^{n \times n}$ with $\R^{n^2}$ using the standard inner product $\langle A, B \rangle = \text{Tr}(A^T B)$. 
+Consider the matrix function:
+\[ F: \R^{n \times n} \to \R^{n \times n}, \quad A \mapsto A^T A \]
+Compute the differential at the identity matrix $Id \in \R^{n \times n}$, applied to a direction matrix $X \in \R^{n \times n}$:
+\[ DF_{Id}(X) = \partial_X F(Id) \]
+\end{exercise*}
+
+\begin{solution}
+Using the directional derivative trick, we evaluate the curve $Id + sX$ as it passes through $Id$:
+\begin{equation}
+    \begin{aligned}
+        DF_{Id}(X) &= \frac{d}{ds}\bigg|_{s=0} F(Id + sX) \\
+        &= \frac{d}{ds}\bigg|_{s=0} (Id + sX)^T (Id + sX) \\
+        &= \frac{d}{ds}\bigg|_{s=0} [Id^T Id + sX^T Id + s Id^T X + s^2 X^T X] \\
+        &= \frac{d}{ds}\bigg|_{s=0} [Id + s(X^T + X) + s^2 X^T X]
+    \end{aligned}
+\end{equation}
+Taking the derivative with respect to $s$ and plugging in $s=0$ eliminates the constant term and the $s^2$ term, leaving exactly the linear part:
+\[ DF_{Id}(X) = X^T + X \]
+\end{solution}
+
+\hrulefill
+
+\section{Taylor Expansions in $\R^n$}
+
+In the lecture, you saw the terrifying full formula for a function $f \in C^k(U, \R)$:
+\[ f(\bar{x} + h) = \sum_{\abs{\alpha}=0}^k \partial^\alpha f(\bar{x}) \frac{h^\alpha}{\alpha!} + o(\abs{h}^k) \]
+where $\alpha \in \N^n$ is a \qt{multi-index}.
+
+\gemininote{What on earth is a multi-index? It's just a compact way to track all the crazy mixed partial derivatives! $\alpha = (\alpha_1, \dots, \alpha_n)$ tells you how many times to differentiate with respect to each variable. The sum $\abs{\alpha} = \alpha_1 + \dots + \alpha_n$ is the total order of the derivative. For example, $\partial^{(2,1)} = \partial_x^2 \partial_y$.}
+
+\begin{exercise*}
+Let $f \in C^3(\R^2, \R)$. Write out the maximal Taylor approximation (up to 3rd order) using multi-indices.
+\end{exercise*}
+
+\begin{solution}
+Let's list all possible multi-indices $\alpha = (\alpha_1, \alpha_2)$ up to order 3:
+\begin{itemize}
+    \item $\abs{\alpha}=0$: $(0,0)$
+    \item $\abs{\alpha}=1$: $(1,0), (0,1)$
+    \item $\abs{\alpha}=2$: $(2,0), (1,1), (0,2)$
+    \item $\abs{\alpha}=3$: $(3,0), (2,1), (1,2), (0,3)$
+\end{itemize}
+Recall the factorial rule: $\alpha! = \alpha_1! \alpha_2!$. For example, $(2,1)! = 2! \cdot 1! = 2$.
+Plugging this into the formula yields an explosion of terms:
+\begin{equation}
+    \begin{aligned}
+        f(\bar{x}+h) = \;&f(\bar{x}) + \partial_1 f(\bar{x})h_1 + \partial_2 f(\bar{x})h_2 \\
+        &+ \frac{1}{2}\partial_1^2 f(\bar{x})h_1^2 + \partial_1 \partial_2 f(\bar{x})h_1 h_2 + \frac{1}{2}\partial_2^2 f(\bar{x})h_2^2 \\
+        &+ \frac{1}{6}\partial_1^3 f(\bar{x})h_1^3 + \frac{1}{2}\partial_1^2 \partial_2 f(\bar{x})h_1^2 h_2 + \frac{1}{2}\partial_1 \partial_2^2 f(\bar{x})h_1 h_2^2 + \frac{1}{6}\partial_2^3 f(\bar{x})h_2^3 \\
+        &+ o(\abs{h}^3)
+    \end{aligned}
+\end{equation}
+\end{solution}
+
+\subsection*{The Working Formula and Substitution Trick}
+Because the multi-index formula is a nightmare to write out, we often rewrite it using the gradient operator as a polynomial:
+\[ f(\bar{x} + h) = \sum_{l=0}^k \frac{1}{l!} \left( \sum_{m=1}^n h_m \partial_m \right)^l f(\bar{x}) + o(\abs{h}^k) \]
+
+However, the absolute best way to compute Taylor series is often to \textbf{cheat} using known 1D series from Analysis 1!
+
+\begin{exercise*}
+Compute the Taylor expansion of $f(x,y) = (x + y^2)e^{-x^2-y^2}$ around $(0,0)$ up to third order.
+\end{exercise*}
+
+\begin{solution}
+\textbf{Cumbersome solution:} Calculate all partial derivatives up to the 3rd order and plug them into the massive formula above. \textcolor{eDarkRed}{(Please never do this in an exam!)}
+
+\textbf{The Easy Solution:} Use the substitution and multiplication rules from Analysis 1. We know the 1D Taylor series for $e^z = 1 + z + \frac{z^2}{2} + \dots$. Substitute $z = -x^2 - y^2$:
+\[ e^{-x^2-y^2} = 1 + (-x^2 - y^2) + o(\abs{(x,y)}^3) \]
+Now, multiply this by the front bracket, dropping any terms that result in a power higher than 3:
+\begin{equation}
+    \begin{aligned}
+        f(x,y) &= (x + y^2) \left( 1 - x^2 - y^2 + o(\abs{(x,y)}^3) \right) \\
+        &= x + y^2 - x^3 - xy^2 + o(\abs{(x,y)}^3)
+    \end{aligned}
+\end{equation}
+And we are done in two lines of algebra!
+\end{solution}
+
+\vspace{0.5cm}
+\begin{remark}
+The 2nd order Taylor approximation of $f \in C^2(\R^n, \R)$ around $x_0 \in \R^n$ can be expressed beautifully using matrices:
+\[ f(x_0 + h) = f(x_0) + \nabla f(x_0)^T h + \frac{1}{2} h^T \mathscr{H}f(x_0) h + o(\abs{h}^2) \]
+where $\mathscr{H}f(x_0) = (\partial_i \partial_j f(x_0))_{i,j}$ is the symmetric \textbf{Hessian matrix} of $f$. 
+\textcolor{eGray}{(Notice how perfectly this mirrors the 1D formula: $f(x_0) + f' h + \frac{1}{2}f'' h^2$!)}
+\end{remark}
+
+\end{document}

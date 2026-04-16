@@ -1,0 +1,192 @@
+\documentclass[12pt]{article}
+\usepackage[ngerman]{babel} 
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{mathrsfs}
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+% ==========================================
+% E-INK GRADIENT PALETTE V2 (Optimiert für Kontrast)
+% ==========================================
+\definecolor{eBlack}{RGB}{0,0,0}               
+\definecolor{eMediumBlue}{RGB}{0,0,205}        
+\definecolor{eDarkRed}{RGB}{139,0,0}           
+\definecolor{eDarkGreen}{RGB}{0,100,0}         
+\definecolor{eSaddleBrown}{RGB}{139,69,19}     
+\definecolor{eDarkCyan}{RGB}{0,139,139}        
+\definecolor{eOlive}{RGB}{128,128,0}           
+\definecolor{eMediumOrchid}{RGB}{186,85,211}   
+\definecolor{ePaleVioletRed}{RGB}{219,112,147} 
+\definecolor{eSpringGreen}{RGB}{0,255,127}     
+\definecolor{eSandyBrown}{RGB}{244,164,96}     
+\definecolor{eSilver}{RGB}{192,192,192}        
+\definecolor{eGold}{RGB}{255,215,0}            
+\definecolor{eKhaki}{RGB}{240,230,140}         
+\definecolor{eMistyRose}{RGB}{255,228,225}     
+
+% Grauwerte
+\definecolor{eDarkGray}{RGB}{64,64,64}   
+\definecolor{eGray}{RGB}{128,128,128}    
+\definecolor{eLightGray}{RGB}{211,211,211} 
+
+% --- GLOBALE MATHEMATIK-FARBE ---
+\everymath{\color{eMediumBlue}}
+\everydisplay{\color{eMediumBlue}}
+
+% --- TITEL-FORMATIERUNG ---
+\titleformat{\section}{\huge\sffamily\bfseries\color{eMediumBlue}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\Large\sffamily\bfseries\color{eDarkCyan}}{\thesubsection}{0.5em}{}
+
+% --- LISTEN-FORMATIERUNG ---
+\setlist[enumerate,1]{label=\textbf{\textcolor{eDarkRed}{\alph*)}}}
+\setlist[enumerate,2]{label=\textbf{\textcolor{eDarkRed}{\roman*)}}}
+\setlist[itemize,1]{label=\textcolor{eDarkRed}{$\bullet$}}
+\setlist[itemize,2]{label=\textcolor{eDarkRed}{$\circ$}}
+
+% --- STANDARD MAKROS ---
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ball}{\mathcal{B}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\warning}[1]{\textcolor{eDarkRed}{#1}}
+\newcommand{\qt}[1]{\textit{„#1“}}
+\DeclareMathOperator{\grad}{grad}
+
+% --- GEMINI STYLES ---
+\newcommand{\gemininote}[1]{\textcolor{eSandyBrown}{\textbf{[Gemini-Notiz: #1]}}}
+\newcommand{\geminiwarning}[1]{\textcolor{eDarkRed}{\textbf{[Gemini-Warnung: #1]}}}
+
+% Mathematische Operatoren
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclareMathOperator{\Span}{span}
+
+% --- THEOREM-UMGEBUNGEN ---
+\newtheoremstyle{taBlue}
+  {12pt}{12pt}{\normalfont}{}{\bfseries\color{eMediumBlue}}{.}{0.5em}{}
+\newtheoremstyle{taGreen}
+  {12pt}{12pt}{\normalfont}{}{\bfseries\color{eDarkGreen}}{.}{0.5em}{}
+\newtheoremstyle{taBrown}
+  {12pt}{12pt}{\normalfont}{}{\bfseries\color{eSaddleBrown}}{.}{0.5em}{}
+\newtheoremstyle{taRed}
+  {12pt}{12pt}{\normalfont}{}{\bfseries\color{eDarkRed}}{.}{0.5em}{}
+
+\theoremstyle{taBlue}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{proposition*}{Proposition}
+\newtheorem*{theorem*}{Theorem}
+
+\theoremstyle{taGreen}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{definition*}{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem*{example*}{Example}
+\newtheorem{answer}{Answer}[section]
+\newtheorem*{answer*}{Answer}
+
+\theoremstyle{taBrown}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{exercise*}{Exercise}
+\newtheorem*{exercises}{Exercises}
+\newtheorem{question}{Question}[section]
+\newtheorem*{question*}{Question}
+\newtheorem*{warmup}{Warm-up}
+
+\theoremstyle{taRed}
+\newtheorem*{remark}{Remark}
+
+\newenvironment{solution}{\begin{proof}[\textbf{\textcolor{eDarkGreen}{Solution}}]}{\end{proof}}
+
+
+
+\begin{document}
+\setcounter{section}{0} % Start at section 2
+
+% Week 2 - Monday: Metric Spaces, Open and Closed Sets, Sequences and Convergence
+%\include{content/w2-1monday-metric-spaces.tex}
+%\include{content/w2-1monday-open-and-closed-sets.tex}
+%\include{content/w2-1monday-sequenecs-and-convergence.tex}
+
+
+% Week 2 - Friday: Continuity, Compactness
+%\include{content/w2-2friday.tex}
+
+% Week 2
+\include{content/w2.tex}
+
+% Week 3
+\include{content/w3.tex}
+
+% Week 4
+\include{content/w4.tex}
+
+% Week 5
+\include{content/w5.tex}
+
+
+
+
+% Week 7 - 
+\include{content/w7.tex}
+
+\end{document}
+
+% \section{Compactness}
+
+% Let $(X, d)$ be a metric space. A subset $K \subseteq X$ is called \textcolor{eDarkRed}{\textbf{compact}} if one of the following equivalent conditions hold:
+
+% \begin{enumerate}
+%     \item $K$ is \textcolor{eMediumBlue}{\qt{sequentially compact}}: every sequence $(x_n)_{n \in \N}$ in $K$ has a subsequence that converges to a point in $K$.
+%     \item $K$ is \textcolor{eMediumBlue}{\qt{topologically compact}}: every family of open sets $\set{U_i}_{i \in I}$ that cover $K$, has a finite subcover.
+% \end{enumerate}
+
+% \begin{center}
+% \begin{tikzpicture}[scale=1.2, thick]
+%     % The space X
+%     \draw[eDarkGray, dashed] (-3, -2) rectangle (5, 3);
+%     \node[eDarkGray] at (4.5, 2.5) {$X$};
+
+%     % The compact set K
+%     \draw[eDarkRed, fill=eDarkRed!20, rounded corners=15pt] (0,0) -- (1,2) -- (3,1.5) -- (2,-1) -- cycle;
+%     \node[eDarkRed] at (1.5, 0.5) {\Large $K$};
+
+%     % An infinite open cover (faded)
+%     \foreach \x/\y in {0/0, 0.5/1, 1/1.8, 1.5/0.2, 2/1, 2.5/-0.5, 2.8/1.2, 0.2/1.5, 1.8/-0.8, 0.8/-0.2} {
+%         \draw[eDarkGreen!30, fill=eDarkGreen!5, dashed] (\x,\y) circle (0.8cm);
+%     }
+
+%     % A finite subcover (highlighted)
+%     \draw[eMediumBlue, fill=eMediumBlue!10, fill opacity=0.5, very thick] (0.2, 0.8) circle (1.2cm);
+%     \draw[eMediumBlue, fill=eMediumBlue!10, fill opacity=0.5, very thick] (2.2, 0.5) circle (1.3cm);
+%     \draw[eMediumBlue, fill=eMediumBlue!10, fill opacity=0.5, very thick] (1.2, -0.2) circle (1cm);
+    
+%     \node[eMediumBlue] at (-1, 1.5) {$U_{\alpha_1}$};
+%     \node[eMediumBlue] at (3.5, 1.2) {$U_{\alpha_2}$};
+%     \node[eMediumBlue] at (1.2, -1.4) {$U_{\alpha_3}$};
+    
+% \end{tikzpicture}
+% \end{center}
+% \textcolor{eGray}{Visualizing Topological Compactness: Out of an infinite sea of open sets covering $K$, we only actually need a finite number (the blue ones) to completely cover $K$.}
+
+% \vspace{0.5cm}
+
+% \begin{exercises}
+% \begin{enumerate}
+%     \item Show that every finite subset $\set{x_1, \dots, x_n} \subseteq X$ is compact.
+%     \item If $K$ is compact, is it complete?
+% \end{enumerate}
+% \end{exercises}
+
+% \begin{solution}
+% \textbf{1.} Let $\set{U_\alpha}_{\alpha \in I}$ be an open cover of $\set{x_1, \dots, x_n}$. For each $i=1, \dots, n$, we can pick a set $U_{\alpha_i}$ from our cover such that $x_i \in U_{\alpha_i}$. 
+% Then the collection $\set{U_{\alpha_1}, \dots, U_{\alpha_n}}$ is a finite subcover. Thus, the set is compact.
+
+% \vspace{0.3cm}
+% \textbf{2.} Yes. Let $(x_n)_{n=0}^\infty$ be a Cauchy sequence in $X$. Because $K$ is compact, we can find a convergent subsequence. Since every Cauchy sequence with a convergent subsequence must itself converge to the exact same limit, $(x_n)$ converges in $K$. Thus, $K$ is complete.
+% \end{solution}

@@ -1,0 +1,261 @@
+\setcounter{section}{2} % Set to appropriate section number for Week 3
+
+\section{Compactness (Continued)}
+
+\begin{theorem*}[Heine-Borel]
+A subset $K \subseteq \R^n$ equipped with the \emph{standard metric} is compact if and only if it is closed and bounded.
+\end{theorem*}
+
+\gemininote{The Heine-Borel theorem perfectly captures our intuitive visual understanding of a "compact" (small, contained, boundary-inclusive) set in standard geometry. However, this beautiful equivalence strictly relies on the standard Euclidean space. We will now prove that Heine-Borel completely breaks down if we use a non-standard metric!}
+
+\begin{exercise*}
+Let $(X, d)$ be a metric space.
+\begin{enumerate}
+    \item Show that $\tilde{d}(x,y) := \frac{d(x,y)}{1 + d(x,y)}$ is also a valid metric on $X$.
+    \item Show that if $U \subseteq X$ is open with respect to $d$, then $U$ is also open with respect to $\tilde{d}$. \textcolor{eGray}{(Optional)}
+    \item Show that for $X = \R^n$ with the metric $\tilde{d}(x,y) = \frac{\abs{x-y}}{1+\abs{x-y}}$, the entire space $\R^n \subseteq X$ is closed and bounded, but \emph{not} compact.
+\end{enumerate}
+\end{exercise*}
+
+\begin{solution}
+\textbf{a)} Non-negativity, definiteness, and symmetry follow immediately from the properties of $d(x,y)$. 
+For the triangle inequality, we want to show:
+\[ \frac{d(x,y)}{1+d(x,y)} \le \frac{d(x,z)}{1+d(x,z)} + \frac{d(z,y)}{1+d(z,y)} \]
+Let's denote $d_1 = d(x,y)$, $d_2 = d(x,z)$, and $d_3 = d(z,y)$. We cross-multiply to clear the denominators:
+\[ d_1(1+d_2)(1+d_3) \le d_2(1+d_1)(1+d_3) + d_3(1+d_1)(1+d_2) \]
+Expanding everything yields:
+\[ d_1 + d_1 d_2 + d_1 d_3 + d_1 d_2 d_3 \le d_2 + d_1 d_2 + d_2 d_3 + d_1 d_2 d_3 + d_3 + d_1 d_3 + d_2 d_3 + d_1 d_2 d_3 \]
+Canceling the common terms ($d_1 d_2$, $d_1 d_3$, and one $d_1 d_2 d_3$) leaves us with:
+\[ d_1 \le d_2 + 2d_2 d_3 + d_3 + d_1 d_2 d_3 \]
+We know from the standard triangle inequality that $d_1 \le d_2 + d_3$. Subtracting this known truth from both sides yields:
+\[ 0 \le 2d_2 d_3 + d_1 d_2 d_3 \]
+Since distances are non-negative, this final inequality is trivially true! Thus, $\tilde{d}$ is a metric.
+
+\vspace{0.3cm}
+\textbf{b)} \textcolor{eGray}{(Proof sketch)} The function $t \mapsto \frac{t}{1+t}$ is strictly monotonically increasing for $t \ge 0$. Therefore, open balls in $d$ can be directly mapped to open balls in $\tilde{d}$ by simply transforming the radius $r$ into $\tilde{r} = \frac{r}{1+r}$.
+
+\vspace{0.3cm}
+\textbf{c)} Note that for any $t \ge 0$, the expression $\frac{t}{1+t}$ is strictly strictly less than $1$. Therefore, for all $x,y \in \R^n$:
+\[ \tilde{d}(x,y) = \frac{\abs{x-y}}{1+\abs{x-y}} < 1 \]
+This means the entire space $\R^n$ fits inside the open ball $\tilde{B}_1(0)$. Thus, $\R^n$ is \textbf{bounded} with respect to this metric! Also, the full space is trivially \textbf{closed}. 
+However, consider the sequence $x_n = (n, 0, \dots, 0)$. This sequence wanders off to infinity and has absolutely no convergent subsequence. Since it lacks sequential compactness, $\R^n$ is \textbf{not compact}, breaking Heine-Borel!
+\end{solution}
+
+\hrulefill
+
+\section{Why do we care about compactness?}
+
+Compactness is one of the most powerful properties a space can have. It grants us three massive mathematical guarantees:
+
+\begin{enumerate}
+    \item \textbf{Preserved by continuous functions:} 
+    Let $X, Y$ be metric spaces, and $f: X \to Y$ continuous. If $K \subseteq X$ is compact, then its image $f(K) \subseteq Y$ is guaranteed to be compact.
+    
+    \item \textbf{Weierstrass Theorem / Extreme Value Theorem:}
+    Let $K \subseteq X$ be a compact metric space, and $f: K \to \R$ a continuous function. Then $f$ attains an absolute maximum and minimum within $K$. \textcolor{eGray}{(In particular, $f$ is bounded!)}
+    
+    \item \textbf{Uniform continuity:}
+    Let $X, Y$ be metric spaces, and $f: X \to Y$ continuous. If $X$ is compact, then $f$ is automatically \emph{uniformly} continuous! \textcolor{eGray}{(You can pick a global $\delta$ that works everywhere for a given $\eps$.)}
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, thick]
+    % Axes
+    \draw[->, eBlack] (-0.5, 0) -- (4, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -0.5) -- (0, 3) node[above] {$f(x)$};
+    
+    % Function curve
+    \draw[eMediumBlue, very thick] (0.5, 1.5) .. controls (1, 2.5) and (1.5, 3) .. (2.5, 0.5) .. controls (3, 0) and (3.5, 1) .. (3.8, 1.5);
+    
+    % Interval markers
+    \draw[dashed, eGray] (0.5, 0) node[below, eBlack] {$a$} -- (0.5, 1.5);
+    \draw[dashed, eGray] (3.8, 0) node[below, eBlack] {$b$} -- (3.8, 1.5);
+    
+    % Max / Min markers
+    \coordinate (Max) at (1.15, 2.55);
+    \coordinate (Min) at (2.7, 0.35);
+    
+    \fill[eDarkRed] (Max) circle (2pt);
+    \fill[eDarkCyan] (Min) circle (2pt);
+    
+    \draw[dashed, eGray] (Max) -- (1.15, 0) node[below, eBlack] {$c$};
+    \draw[dashed, eGray] (Max) -- (0, 2.55) node[left, eBlack] {$f(c)$};
+    
+    \draw[dashed, eGray] (Min) -- (2.7, 0) node[below, eBlack] {$d$};
+    \draw[dashed, eGray] (Min) -- (0, 0.35) node[left, eBlack] {$f(d)$};
+\end{tikzpicture}\\
+\textcolor{eGray}{A continuous function on a compact interval $[a,b]$ always attains its absolute maximum (red) and absolute minimum (cyan).}
+\end{center}
+
+\hrulefill
+
+\section{Connectedness}
+
+\begin{definition*}[Disconnected metric space/subset]
+A metric space $(X, d)$ is \textbf{disconnected} if there exist subsets $U_1, U_2 \subseteq X$ which are:
+\begin{enumerate}
+    \item \textbf{open}
+    \item \textbf{non-empty} ($U_1 \ne \emptyset \ne U_2$)
+    \item \textbf{disjoint} ($U_1 \cap U_2 = \emptyset$)
+\end{enumerate}
+such that $X = U_1 \cup U_2$. Similarly, a subset $A \subseteq X$ is disconnected if it can be split in this exact same way using the induced metric. \\
+\textbf{Connected} is simply defined as the logical negation of disconnected!
+\end{definition*}
+
+\gemininote{Intuitively, a space is disconnected if it consists of two or more completely isolated \qt{islands}. Because proving connectedness directly is very hard, we almost always prove it by contradiction: We assume the space \emph{is} disconnected (split into two islands $U_1$ and $U_2$) and show that this leads to a logical paradox.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, very thick]
+    % Disconnected
+    \node[eDarkRed, font=\bfseries] at (1.5, 1.5) {Disconnected};
+    \draw[eMediumBlue, fill=eMediumBlue!10] (0,0) circle (0.8cm);
+    \draw[eMediumBlue, fill=eMediumBlue!10] (3,0) circle (1cm);
+    \node[eMediumBlue] at (0,0) {$U_1$};
+    \node[eMediumBlue] at (3,0) {$U_2$};
+    \draw[<->, eDarkRed, dashed] (0.9,0) -- (1.9,0) node[midway, above] {Gap};
+
+    % Connected
+    \begin{scope}[xshift=6cm]
+        \node[eDarkGreen, font=\bfseries] at (1.5, 1.5) {Connected};
+        \draw[eMediumBlue, fill=eMediumBlue!10] (0,0) .. controls (1,1) and (2,1) .. (3,0) .. controls (2,-1) and (1,-1) .. (0,0);
+        \node[eMediumBlue] at (1.5,0) {$X$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{theorem*}
+Continuous functions preserve connected sets! Let $X, Y$ be metric spaces, and $f: X \to Y$ continuous. If $A \subseteq X$ is connected, then its image $f(A)$ is strictly connected in $Y$.
+\end{theorem*}
+
+\begin{exercise*}
+Are the following statements True or False?
+\begin{enumerate}
+    \item The union of connected subsets with a common point is connected.
+    \item The intersection of connected subsets is connected.
+    \item The closure of a connected subset is connected.
+\end{enumerate}
+\end{exercise*}
+
+\begin{solution}
+\textbf{1. True.} \\
+\textcolor{eSaddleBrown}{Proof:} Let $X$ be a metric space, $V_1, V_2 \subseteq X$ connected, and let $x_0 \in V_1 \cap V_2$ be their shared point. Assume by contradiction that their union is disconnected. Then $V_1 \cup V_2 = U_1 \cup U_2$, where $U_1, U_2 \subseteq X$ are open, non-empty, and disjoint. 
+Without loss of generality, assume the shared point $x_0$ lies in $U_1$. Because $x_0$ is in both $V_1$ and $V_2$, it follows that $U_1 \cap V_1 \ne \emptyset$ and $U_1 \cap V_2 \ne \emptyset$. 
+Since $V_1$ and $V_2$ are individually connected, they cannot be split across $U_1$ and $U_2$. Since they both share a point with $U_1$, they must both lie \emph{entirely} inside $U_1$. Thus $V_1 \cap U_2 = \emptyset$ and $V_2 \cap U_2 = \emptyset$. This forces $U_2 = \emptyset$, which violates the definition of disconnectedness! Contradiction.
+
+\vspace{0.3cm}
+\textbf{2. False.} \\
+\textcolor{eSaddleBrown}{Counterexample:} Let $X = \R^2$. Let $U = [-1, 1] \times \set{0}$ (a horizontal line segment) and $V = S^1$ (the unit circle). Both are perfectly connected. However, their intersection is exactly two isolated points: $U \cap V = \set{(-1,0), (1,0)}$, which is clearly disconnected!
+
+\vspace{0.3cm}
+\textbf{3. True.} \\
+\textcolor{eSaddleBrown}{Proof:} Let $A$ be connected with closure $\bar{A}$. Suppose $\bar{A}$ is disconnected, meaning there exist disjoint open sets $U_1, U_2$ covering $\bar{A}$. Without loss of generality, let $A \cap U_1 \ne \emptyset$. Since $A$ is connected and covered by $U_1 \cup U_2$, it must lie entirely in one of them, meaning $A \cap U_2 = \emptyset$. 
+However, $U_2$ is an open set. If an open set contains no points of $A$, it cannot possibly contain any boundary points of $A$ either! Thus $U_2 \cap \bar{A} = \emptyset$, meaning $U_2$ is empty. Contradiction.
+\end{solution}
+
+\hrulefill
+
+\section{Path Connectedness}
+
+\begin{definition*}[Paths and Path-connectedness]
+Let $(X, d)$ be a metric space. 
+\begin{itemize}
+    \item A \textbf{path} is a continuous function $\gamma: [0,1] \to X$, where $[0,1]$ carries the standard metric.
+    \item A space (or subset) $X$ is \textbf{path-connected} if for any two points $x, y \in X$, there exists a path $\gamma$ such that $\gamma(0) = x$ and $\gamma(1) = y$.
+\end{itemize}
+\end{definition*}
+
+\begin{proposition*}
+\begin{itemize}
+    \item \textbf{Path-connected $\implies$ connected.} (This is always true!)
+    \item For \emph{open} subsets of Euclidean space $\R^n$: \textbf{connected $\iff$ path-connected.}
+\end{itemize}
+\end{proposition*}
+
+\subsection*{\warning{Counterexample: The Topologist's Sine Curve}}
+The reverse implication (connected $\implies$ path-connected) is \textbf{false} for non-open sets! Consider the set:
+\[ S := \set{\left(t, \sin\left(\frac{1}{t}\right)\right) : t > 0} \cup \set{(0,0)} \subseteq \R^2 \]
+$S$ is \textbf{connected} (because the sine wave part is connected, and we proved earlier that adding boundary points via the closure maintains connectedness). However, $S$ is \textbf{not path-connected}!
+
+\gemininote{Why can't we draw a path? As $t$ approaches $0$, the frequency of the sine wave goes to infinity. It oscillates up and down infinitely fast between $-1$ and $1$. If you try to draw a path from the origin $(0,0)$ to the rest of the curve, your pen would have to cross the x-axis an infinite number of times in a finite amount of time, shattering continuity!}
+
+\begin{solution}
+Assume by contradiction that $S$ is path-connected. Then there exists a continuous path $\gamma: [0,1] \to S$ starting at the origin $\gamma(0) = (0,0)$ and ending at some point on the curve, say $\gamma(1) = (1, \sin(1))$. 
+We can write the path as two coordinate functions $\gamma(t) = (x(t), y(t))$. Since $\gamma$ is continuous, $x(t)$ and $y(t)$ must be continuous.
+
+By the Intermediate Value Theorem, since $x(0) = 0$ and $x(1) = 1$, the function $x(t)$ must hit every x-coordinate in between. Let's look at the peaks of the sine wave, which occur at $x$-coordinates $\frac{1}{2\pi n + \pi/2}$. 
+We can construct a sequence of times $(a_n)_{n=0}^\infty$ in $[0,1]$ such that:
+\[ x(a_n) = \frac{1}{2\pi n + \pi/2} \]
+Notice that the y-coordinate at all these peaks is exactly $y(a_n) = 1$. 
+As $n \to \infty$, the x-coordinate goes to 0, so $a_n \to 0$. But look at the limits:
+\[ \lim_{n \to \infty} \gamma(a_n) = (0, 1) \]
+However, sequential continuity demands that $\lim \gamma(a_n) = \gamma(0) = (0,0)$. 
+$(0,1) \ne (0,0)$, which is a massive contradiction! Thus, no such continuous path can exist.
+\end{solution}
+
+\hrulefill
+
+\section{Inner Product and Norm}
+
+\begin{definition*}[Inner Product]
+Let $V$ be a real vector space. An \textbf{inner product} on $V$ is a map $\langle \cdot, \cdot \rangle: V \times V \to \R$ satisfying:
+\begin{enumerate}
+    \item \textbf{Bilinearity:} $\langle \alpha u + \beta v, w \rangle = \alpha \langle u, w \rangle + \beta \langle v, w \rangle$ \textcolor{eGray}{(and equivalently in the second variable)}
+    \item \textbf{Symmetry:} $\langle u, v \rangle = \langle v, u \rangle$
+    \item \textbf{Definiteness:} $\langle u, u \rangle \ge 0$, and $\langle u, u \rangle = 0 \iff u = 0$
+\end{enumerate}
+\end{definition*}
+
+\begin{definition*}[Norm]
+A \textbf{norm} on $V$ is a map $\norm{\cdot}: V \to [0, \infty)$ satisfying:
+\begin{enumerate}
+    \item \textbf{Definiteness:} $\norm{v} \ge 0$, and $\norm{v} = 0 \iff v = 0$
+    \item \textbf{Homogeneity:} $\norm{\alpha v} = \abs{\alpha} \norm{v}$
+    \item \textbf{Triangle Inequality:} $\norm{u + v} \le \norm{u} + \norm{v}$
+\end{enumerate}
+\end{definition*}
+
+\subsection*{Geometric Meaning and Projections}
+Every inner product naturally defines a norm via $\norm{v} := \sqrt{\langle v, v \rangle}$. 
+In $\R^2$, the standard inner product geometrically yields the angle $\theta$ between two vectors:
+\[ \langle x, y \rangle = \norm{x} \norm{y} \cos\theta \]
+In a general inner product space, this formula actually serves as the \emph{definition} of an angle! 
+
+This allows us to define the orthogonal projection of a vector $u$ onto a vector $v$:
+\[ \pi_v(u) = \frac{\langle u, v \rangle}{\norm{v}^2} v \]
+In words, $\pi_v(u)$ is the "shadow" of $u$ pointing exactly along the direction of $v$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    % Axes
+    \draw[->, eBlack, thick] (0,0) -- (5,0);
+    \draw[->, eBlack, thick] (0,0) -- (0,3);
+    
+    % Vectors
+    \coordinate (V) at (4.5, 1.5);
+    \coordinate (U) at (2.5, 2.8);
+    \coordinate (Proj) at (3.3, 1.1); % Approx projection
+    
+    \draw[->, eSaddleBrown] (0,0) -- node[below right] {$v$} (V);
+    \draw[->, eMediumBlue] (0,0) -- node[above left] {$u$} (U);
+    
+    % Projection elements
+    \draw[->, eMediumOrchid] (0,0) -- node[below right, yshift=-0.1cm] {$\pi_v(u)$} (Proj);
+    \draw[dashed, eMediumOrchid] (U) -- (Proj);
+    
+    % Angle
+    \draw[eDarkGreen] (1,0.33) arc (18.4:48.2:1.05cm);
+    \node[eDarkGreen] at (1.1, 0.7) {$\theta$};
+    
+    % Right angle square
+    \draw[eBlack, thin] (3.15, 1.35) -- (3.35, 1.45) -- (3.45, 1.25);
+    \fill[eBlack] (3.3, 1.35) circle (0.5pt);
+\end{tikzpicture}
+\end{center}
+
+\subsection*{The Cauchy-Schwarz Inequality}
+If we take the norm of the projection, we get:
+\[ \norm{\pi_v(u)} = \norm{u} \abs{\cos\theta} = \frac{\abs{\langle u, v \rangle}}{\norm{v}} \]
+Because the "shadow" of a vector can never be longer than the vector itself ($\abs{\cos\theta} \le 1$), it must hold that $\norm{\pi_v(u)} \le \norm{u}$. Moving the denominator over yields the legendary Cauchy-Schwarz Inequality:
+\[ \abs{\langle u, v \rangle} \le \norm{u} \norm{v} \]
+
+\gemininote{Hint for a rigorous algebraic proof: Use the definiteness property! We know that the length of the \qt{perpendicular part} of the vector must be $\ge 0$. So, expand the inner product of the perpendicular part with itself: $\langle u - \pi_v(u), u - \pi_v(u) \rangle \ge 0$. Expanding this term will elegantly spit out the Cauchy-Schwarz inequality!}

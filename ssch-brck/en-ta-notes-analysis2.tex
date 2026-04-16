@@ -15,6 +15,10 @@
 
 \newenvironment*{extra}{}{}
 
+% --- GLOBAL UTILITY COUNTERS ---
+\newcounter{savedSec}
+\newcounter{savedThm}
+
 % --- Page Setup ---
 \geometry{margin=1in}
 
@@ -76,22 +80,26 @@
 % ==========================================
 % E-INK GRADIENT PALETTE V2 (Vibrant & Distinct)
 % ==========================================
-\definecolor{eBlack}{RGB}{0,0,0}
-\definecolor{eMediumBlue}{RGB}{0,0,205}
-\definecolor{eDarkRed}{RGB}{139,0,0}
-\definecolor{eDarkGreen}{RGB}{0,100,0}
-\definecolor{eSaddleBrown}{RGB}{139,69,19}
-\definecolor{eDarkCyan}{RGB}{0,139,139}
-\definecolor{eOlive}{RGB}{128,128,0}
-\definecolor{eMediumOrchid}{RGB}{186,85,211}
-\definecolor{ePaleVioletRed}{RGB}{219,112,147}
-\definecolor{eSpringGreen}{RGB}{0,255,127}
-\definecolor{eSandyBrown}{RGB}{244,164,96}
-\definecolor{eSilver}{RGB}{192,192,192}
-\definecolor{eGold}{RGB}{255,215,0}
-\definecolor{eKhaki}{RGB}{240,230,140}
-\definecolor{eMistyRose}{RGB}{255,228,225} 
+\definecolor{eBlack}{RGB}{0,0,0}               % Grauwert: 00.0%
+\definecolor{eMediumBlue}{RGB}{0,0,205}        % Grauwert: 09.2%
+\definecolor{eDarkRed}{RGB}{139,0,0}           % Grauwert: 16.3%
+\definecolor{eDarkGreen}{RGB}{0,100,0}         % Grauwert: 23.0%
+\definecolor{eSaddleBrown}{RGB}{139,69,19}     % Grauwert: 33.0%
+\definecolor{eDarkCyan}{RGB}{0,139,139}        % Grauwert: 38.2%
+\definecolor{eOlive}{RGB}{128,128,0}           % Grauwert: 44.5%
+\definecolor{eMediumOrchid}{RGB}{186,85,211}   % Grauwert: 50.8%
+\definecolor{ePaleVioletRed}{RGB}{219,112,147} % Grauwert: 58.0%
+\definecolor{eSpringGreen}{RGB}{0,255,127}     % Grauwert: 64.4%
+\definecolor{eSandyBrown}{RGB}{244,164,96}     % Grauwert: 70.7%
+\definecolor{eSilver}{RGB}{192,192,192}        % Grauwert: 75.3%
+\definecolor{eGold}{RGB}{255,215,0}            % Grauwert: 79.4% (für Orange)
+\definecolor{eKhaki}{RGB}{240,230,140}         % Grauwert: 87.3%
+\definecolor{eMistyRose}{RGB}{255,228,225}     % Grauwert: 92.4%
 
+% Grau:
+\definecolor{eDarkGray}{RGB}{64,64,64}   % Grauwert: 25.1%
+\definecolor{eGray}{RGB}{128,128,128}    % Grauwert: 50.2% (Die exakte Mitte)
+\definecolor{eLightGray}{RGB}{211,211,211} % Grauwert: 82.7%
 
 
 \begin{document}
@@ -103,6 +111,7 @@
 
 % Week 8 Monday 13.4.2026 - Tangent Spaces, Jordan Measure, Multidimensional Integrals:
 
+\include{content/w7-submanifolds.tex}
 \include{content/w8-1mo-tangent-spaces.tex}
 \include{content/w8-1mo-jordan-measure.tex}
 \include{content/w8-1mo-multidimensional-integrals.tex}

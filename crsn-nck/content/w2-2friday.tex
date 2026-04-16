@@ -1,0 +1,199 @@
+\section*{Friday}
+
+\begin{warmup}
+What is the shape of $B_1(0) \subseteq \R^2$ with:
+\begin{itemize}
+    \item The Supremum metric?
+    \item The Manhattan metric?
+\end{itemize}
+\end{warmup}
+
+\begin{answer*}\hfill\\ % Forces a line break before the tikzpicture
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    % Supremum Graphic
+    \node[eDarkCyan, font=\bfseries] at (0, 1.5) {Supremum:};
+    \draw[->, thick, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+    \draw[->, thick, eBlack] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+    
+    \draw[eDarkGreen, dashed] (-1,-1) rectangle (1,1);
+    \fill[eSaddleBrown] (0,1) circle (1.5pt) node[above right] {$(0,1)$};
+    \fill[eSaddleBrown] (1,0) circle (1.5pt) node[above right] {$(1,0)$};
+
+    % Manhattan Graphic
+    \begin{scope}[xshift=4cm]
+        \node[eDarkCyan, font=\bfseries] at (0, 1.5) {Manhattan:};
+        \draw[->, thick, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+        \draw[->, thick, eBlack] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+        
+        \draw[eDarkRed, dashed] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+        \fill[eSaddleBrown] (0,1) circle (1.5pt) node[above right] {$(0,1)$};
+        \fill[eSaddleBrown] (1,0) circle (1.5pt) node[above right] {$(1,0)$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{answer*}
+
+\vspace{0.5cm}
+
+\begin{definition*}[Continuous functions]
+For $(X, d_X)$ and $(Y, d_Y)$ metric spaces, a function $f: X \to Y$ is called \emph{continuous}, if one of the following equivalent conditions hold:
+
+\begin{enumerate}
+    \item $(\eps-\delta)$: $\forall x_0 \in X, \forall \eps > 0 \, \exists \delta > 0$ s.t. $\forall x \in X$:
+    \[ d_X(x_0, x) < \delta \implies d_Y(f(x_0), f(x)) < \eps \]
+    
+    \item (sequentially continuous):
+    \[ \lim_{n \to \infty} f(x_n) = f(x) \]
+    For any sequence $(x_n)_{n=0}^\infty$ in $X$ with limit $x \in X$, (and the limit exists).
+    
+    \item (topological): For all $U \subseteq Y$ open, $f^{-1}(U) \subseteq X$ is \emph{open}.
+\end{enumerate}
+\end{definition*}
+
+\begin{example*}
+Let $f: \R \to \R$, $x \mapsto x^2$. Let $a < b \in \R$.
+Then for $a < 0 < b$, $f^{-1}((a,b)) = (-\sqrt{b}, \sqrt{b})$ which is open. \\
+For $a < b < 0$, $f^{-1}((a,b)) = \emptyset$. \\
+For $0 < a < b$, $f^{-1}((a,b)) = (-\sqrt{b}, -\sqrt{a}) \cup (\sqrt{a}, \sqrt{b})$.
+
+\textcolor{eDarkCyan}{Why is it enough to check only these cases?} \\
+\textcolor{eGray}{Hint: $f^{-1}(U_1 \cup U_2) = f^{-1}(U_1) \cup f^{-1}(U_2)$}
+\end{example*}
+
+\vspace{0.5cm}
+
+\begin{question}
+\begin{enumerate}[start=2] % Matching the numbering from the handwritten notes!
+    \item Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces, where $d_Y$ is the discrete metric. Is $f: (X, d_X) \to (Y, d_Y)$ continuous?
+    \item What if $d_X$ is the discrete metric, and $d_Y$ is arbitrary?
+\end{enumerate}
+\end{question}
+
+\begin{answer}
+\begin{enumerate}[start=2]
+    \item \textcolor{eDarkRed}{No.} For example, take the spaces $X = Y = \R$, $d_X$ the standard metric, and $f = \text{Id}: X \to Y, z \mapsto z$. Then $\set{0} \subseteq Y$ is open, but $\set{0} = \text{Id}^{-1}(\set{0})$ is not open in $(X, d_X)$.
+    \item \textcolor{eDarkGreen}{Yes.} Any subset of $X$ is open in the discrete metric, therefore $f^{-1}(U)$ is open for any open $U \subseteq Y$.
+\end{enumerate}
+\end{answer}
+
+\hrulefill
+
+\section{Completeness and Compactness}
+
+\begin{definition*}[Cauchy Sequence \& Complete Metric Space]
+Let $(X, d)$ be a metric space, and $(x_n)_{n=0}^\infty$ a sequence in $X$. We say that $(x_n)$ is \textcolor{eDarkGreen}{\textbf{Cauchy}}, if:
+\[ \forall \eps > 0 \, \exists N \in \N \text{ s.t. } d(x_n, x_m) < \eps \quad \forall n, m \ge N \]
+
+$(X, d)$ is a \textcolor{eDarkGreen}{\textbf{complete metric space}} if every Cauchy sequence in $X$ converges with respect to $d$.
+\end{definition*}
+
+\begin{example*}
+\begin{itemize}
+    \item The Euclidean spaces $(\R^n, \langle \cdot, \cdot \rangle_{\text{eucl}})$ are complete.
+    \item Any non-closed subset $U \subseteq \R^n$ (standard metric) and the rationals $\mathbb{Q}$ are not complete.
+    \item $(C^0([0,1]), \sup)$ is complete. \textcolor{eGray}{(Zorich, p. 22)}
+\end{itemize}
+\end{example*}
+
+\begin{definition*}[Compactness]
+A metric space $(X, d)$ is compact if every open cover has a finite subcover.
+\end{definition*}
+
+\begin{theorem*}
+A metric space $(X, d)$ is compact if and only if every sequence in $X$ has a convergent subsequence in $X$.
+\end{theorem*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, very thick]
+    % The metric space X (reshaped so it actually fits inside the cover!)
+    \draw[eMediumBlue, fill=eMediumBlue!5] (0.5,0.5) .. controls (-0.5,1.5) and (1,2.8) .. (2.5,2.5) .. controls (4.5,2.2) and (4,0) .. (2,0) .. controls (1,-0.5) and (0.8,0) .. cycle;
+    \node[eMediumBlue] at (4.2, 2.5) {\Large $X$};
+    
+    % U1 covers the bottom left
+    \draw[eDarkRed, dashed, fill=eDarkRed!10, fill opacity=0.3] (1.2, 0.4) circle (1.4cm);
+    \node[eDarkRed] at (1.2, -0.6) {$U_1$};
+    
+    % U2 covers the right side
+    \draw[eSaddleBrown, dashed, fill=eSaddleBrown!10, fill opacity=0.3] (2.8, 1.2) circle (1.6cm);
+    \node[eSaddleBrown] at (3.8, 0.8) {$U_2$};
+    
+    % U3 covers the top left
+    \draw[eMediumOrchid, dashed, fill=eMediumOrchid!10, fill opacity=0.3] (1.0, 1.8) circle (1.3cm);
+    \node[eMediumOrchid] at (0.0, 2.6) {$U_3$};
+    
+    \node[eDarkGray] at (2, -1.5) {$U_1 \cup U_2 \cup U_3 = X$};
+\end{tikzpicture}
+\end{center}
+
+\textcolor{eGray}{A subset of a metric space $(X, d)$ is compact if the metric space $(K, d)$ is compact. This is equivalent to the definition in the script:}
+
+\vspace{0.5cm}
+
+% --- MAGIC COUNTER TRICK FOR DEF 9.63 ---
+\newcounter{tempSection}
+\setcounter{tempSection}{\value{section}}
+\newcounter{tempTheorem}
+\setcounter{tempTheorem}{\value{theorem}}
+
+\setcounter{section}{9}
+\setcounter{theorem}{62} % 62 + 1 = 63 when the environment begins
+
+\begin{definition}[Compactness]
+Let $(X, d)$ be a metric space. A subset $K \subseteq X$ is called compact if one of the following equivalent conditions hold:
+\begin{enumerate}
+    \item $K$ is \textcolor{eMediumBlue}{\qt{sequentially compact}}: every sequence $(x_n)_{n \in \N}$ in $K$ has a subsequence that is convergent in $K$.
+    \item $K$ is \textcolor{eMediumBlue}{\qt{topologically compact}}: every family of open sets $\set{U_i}_{i \in I}$ that cover $K$, has a finite subcover.
+\end{enumerate}
+\end{definition}
+
+% --- RESTORE COUNTERS ---
+\setcounter{section}{\value{tempSection}}
+\setcounter{theorem}{\value{tempTheorem}}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, thick]
+    % Open cover of subset
+    \draw[eDarkGray, dashed] (-3, -2) rectangle (5, 3);
+    \node[eDarkGray] at (4.5, 2.5) {$X$};
+
+    % The compact set K
+    \draw[eDarkRed, fill=eDarkRed!20, rounded corners=15pt] (0,0) -- (1,2) -- (3,1.5) -- (2,-1) -- cycle;
+    \node[eDarkRed] at (1.5, 0.5) {\Large $K$};
+
+    % Open sets inside X covering K
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (0.2, 0.8) circle (1.2cm);
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (2.2, 0.5) circle (1.3cm);
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (1.2, -0.2) circle (1cm);
+    
+    \node[eMediumBlue] at (-0.5, 1.5) {$U_{\alpha_1}$};
+    \node[eMediumBlue] at (3.5, 1.2) {$U_{\alpha_2}$};
+    \node[eMediumBlue] at (1.2, -1.4) {$U_{\alpha_3}$};
+\end{tikzpicture}
+\end{center}
+\textcolor{eGray}{Note: $U_i \subseteq X$ are open sets in the metric space $(X,d)$.}
+
+\vspace{0.5cm}
+
+\begin{exercises}
+\begin{enumerate}
+    \item Show that every finite subset $\set{x_1, \dots, x_n} \subseteq X$ is compact.
+    \item If $K$ is compact, is it complete?
+\end{enumerate}
+\end{exercises}
+
+\begin{solution}\hfill\\ % Linebreak for cleaner formatting
+\textbf{1.} Let $\set{U_\alpha}_{\alpha \in I}$ be an open cover of $\set{x_1, \dots, x_n}$. For each $i=1, \dots, n$, pick $U_{\alpha_i}$ such that $x_i \in U_{\alpha_i}$. 
+Then the collection $\set{U_{\alpha_1}, \dots, U_{\alpha_n}}$ is a finite subcover. Thus, the set is compact.
+
+\vspace{0.3cm}
+\textbf{2.} \textcolor{eDarkGreen}{Yes.} Let $(x_n)_{n=0}^\infty$ be a Cauchy sequence in $X$. Then, because $K$ is compact, we find a convergent subsequence:
+\[ \lim_{i \to \infty} x_{n_i} = x \in X \]
+Fix $\eps > 0$. We find $N_1 \in \N$ such that:
+\[ d(x_n, x_m) < \eps \quad \forall n, m > N_1 \]
+and $N_2 \in \N$ such that:
+\[ d(x, x_{n_i}) < \eps \quad \forall i > N_2 \]
+For $N := \max\set{N_1, N_2}$ and $k > N$:
+\[ d(x, x_k) \le d(x, x_{n_k}) + d(x_{n_k}, x_k) < 2\eps \]
+where $n_k \ge k > N$. So, any Cauchy sequence converges.
+\end{solution}

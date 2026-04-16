@@ -1,0 +1,47 @@
+
+\section{Open and Closed Sets}
+
+Let $(X, d)$ be a metric space, let $x \in X$, and let $r \in \R_{>0}$. 
+First, we define the \textcolor{eSaddleBrown}{\qt{open ball}} of radius $r$:
+\[ B_r(x) := \set{ y \in X : d(y,x) < r } \]
+\textcolor{eGray}{Note: Pay attention to the strict inequality!}
+
+\begin{definition*}
+\begin{itemize}
+    \item A subset $U \subseteq X$ is \textcolor{eDarkGreen}{\textbf{open}} iff for every $y \in U$, there exists an $\eps > 0$ such that $B_\eps(y) \subseteq U$.
+    \item A subset $A \subseteq X$ is \textcolor{eDarkRed}{\textbf{closed}} iff its complement $X \setminus A$ is open.
+\end{itemize}
+\end{definition*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, very thick]
+    % Visualizing an open set
+    \draw[eMediumBlue, fill=eMediumBlue!10, dashed] (0,0) .. controls (1,2) and (3,1) .. (4,0) .. controls (3,-2) and (1,-1) .. (0,0);
+    \node[eMediumBlue] at (3.5, 1) {\Large $U$};
+    
+    % The open ball inside
+    \coordinate (Y) at (1.5, 0);
+    \draw[eDarkGreen, fill=eDarkGreen!20, dashed] (Y) circle (0.6cm);
+    \fill[eSaddleBrown] (Y) circle (2pt) node[below] {$y$};
+    \draw[eDarkGreen, ->] (Y) -- ++(45:0.6cm) node[midway, above left] {$\eps$};
+    \node[eDarkGreen] at (2.5, -0.5) {$B_\eps(y) \subseteq U$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{exercise*}
+Let $(X,d)$ be a metric space. Show that $X$ and $\emptyset$ are both open and closed.
+\end{exercise*}
+
+\begin{solution}
+First, let's look at openness:
+\begin{itemize}
+    \item $X$ is open because for any $x \in X$ and any $r > 0$, the ball $B_r(x)$ is by definition a subset of $X$. Thus, $B_r(x) \subseteq X$ trivially holds.
+    \item $\emptyset$ contains no points. Therefore, the condition \qt{for every $y \in \emptyset$\dots} is satisfied vacuously. Thus, the empty set is open.
+\end{itemize}
+Now for closedness:
+Since $X$ and $\emptyset$ are each other's complements in $X$ (i.e., $X \setminus X = \emptyset$ and $X \setminus \emptyset = X$), and we just proved both are open, they must both be closed as well!
+\end{solution}
+
+\hrulefill

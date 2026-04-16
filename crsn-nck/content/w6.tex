@@ -1,0 +1,140 @@
+\setcounter{section}{5} % Set to appropriate section number for Week 6
+
+\section{Convexity}
+
+\begin{definition*}[Convex Sets and Functions]
+\begin{itemize}
+    \item A subset $A \subseteq \R^n$ is \textbf{convex} if for any $x, y \in A$ and any $t \in [0,1]$, the point $p = (1-t)x + ty$ is also an element of $A$. \textcolor{eGray}{(The straight line segment connecting any two points in the set lies entirely within the set.)}
+    
+    \item A function $f: A \to \R$ is \textbf{convex} if its domain $A$ is a convex set, and for all $x, y \in A$ and $t \in [0,1]$:
+    \[ f((1-t)x + ty) \le (1-t)f(x) + t f(y) \]
+\end{itemize}
+\end{definition*}
+
+\gemininote{The functional inequality simply states that if you draw a straight secant line between two points on the graph of $f$, the actual graph of the function will always hang \emph{below} (or exactly on) that secant line. It looks like a bowl.}
+
+\begin{proposition*}
+Let $U \subseteq \R^n$ be open and convex, and $f \in C^2(U)$. The following statements are perfectly equivalent:
+\begin{enumerate}
+    \item $f$ is a convex function.
+    \item The Hessian matrix $\mathscr{H}f(x)$ is positive semi-definite (non-negative definite) for all $x \in U$.
+    \item $f(y) - f(x) \ge Df_x(y-x)$ for all $x, y \in U$. \textcolor{eGray}{(The graph of the function always lies above any of its tangent planes.)}
+\end{enumerate}
+\end{proposition*}
+
+\begin{example*}
+The $n$-dimensional parabola $p: \R^n \to \R, x \mapsto \abs{x}^2 = \sum_{i=1}^n x_i^2$ is convex. 
+Taking the second derivatives, we get $\partial_i \partial_j p(x) = 2\delta_{ij}$ (which is $2$ if $i=j$, and $0$ otherwise). Thus, the Hessian is strictly diagonal:
+\[ \mathscr{H}p(x) = 2 I_n \]
+Every eigenvalue of this matrix is $2 > 0$, so the matrix is strictly positive definite. This immediately implies the function is convex!
+\end{example*}
+
+\hrulefill
+
+\begin{exercise*}
+Let $U \subseteq \R^n$ be open and convex, and $f \in C^1(U)$.
+\begin{enumerate}
+    \item Show that $f: U \to \R$ is convex if and only if the 1-dimensional slice functions $f_{x,y}: [0,1] \to \R, s \mapsto f(x + s(y-x))$ are convex for all $x, y \in U$.
+    \item Use this to prove the tangent plane property: $f$ convex $\iff f(y) - f(x) \ge Df_x(y-x)$.
+    \item Conclude that if a convex function $f$ has a critical point at $x_0 \in U$, then it has a \emph{global} minimum at $x_0$.
+\end{enumerate}
+\end{exercise*}
+
+\begin{solution}\hfill\\
+\textbf{a) The 1D Reduction} \\
+Let $f_{x,y}$ be convex. We want to show $f$ is convex.
+\begin{align*}
+    f_{x,y}((1-t)s_0 + t s_1) &\le (1-t)f_{x,y}(s_0) + t f_{x,y}(s_1) \\
+    f(x + [(1-t)s_0 + t s_1](y-x)) &\le (1-t)f(x + s_0(y-x)) + t f(x + s_1(y-x)) 
+\end{align*}
+If we simply set $s_0 = 0$ and $s_1 = 1$, the right side simplifies to $(1-t)f(x) + t f(y)$, and the left side simplifies exactly to $f((1-t)x + ty)$. This immediately proves $f$ is convex!
+Vice versa, if $f$ is convex, the convexity of $f_{x,y}$ follows by applying the convexity of $f$ to the two points $u = x + s_0(y-x)$ and $v = x + s_1(y-x)$.
+
+\vspace{0.3cm}
+\textbf{b) Tangent Plane Inequality} \\
+Recall from Analysis 1 that a 1D function $g \in C^1(I)$ is convex if and only if its derivative $g'$ is monotonically increasing. 
+By part (a), $f$ is convex $\iff f_{x,y}$ is convex $\iff f_{x,y}'$ is increasing $\forall x,y \in U$.
+
+Compute the derivative of the slice using the chain rule for $t \in [0,1]$:
+\[ f_{x,y}'(t) = Df_{x + t(y-x)}(y-x) \]
+By the 1D Mean Value Theorem, there must exist some $s \in (0,1)$ such that:
+\[ f(y) - f(x) = f_{x,y}(1) - f_{x,y}(0) = f_{x,y}'(s) = Df_{x + s(y-x)}(y-x) \]
+Now we apply the increasing property. If $f$ is convex, then $f_{x,y}'(s) \ge f_{x,y}'(0)$.
+\[ f(y) - f(x) = f_{x,y}'(s) \ge f_{x,y}'(0) = Df_x(y-x) \]
+\textcolor{eGray}{(The proof for the reverse direction involves evaluating the inequality for intermediate points $u$ and $v$ to show that $f_{x,y}'$ must be increasing. See the handwritten notes for the algebraic manipulation.)}
+
+\vspace{0.3cm}
+\textbf{c) Critical Points of Convex Functions} \\
+Since $f$ is convex, we can always apply the inequality we just proved. If $x_0$ is a critical point, its differential is zero ($Df_{x_0} = 0$). Plugging this into the inequality for any arbitrary point $y \in U$:
+\[ f(y) - f(x_0) \ge Df_{x_0}(y - x_0) = 0 \implies f(y) \ge f(x_0) \]
+Since this holds for \emph{all} $y \in U$, $x_0$ is an absolute global minimum!
+\end{solution}
+
+\hrulefill
+
+\section{The Inverse Function Theorem (IFT)}
+
+\begin{theorem*}[Inverse Function Theorem]
+Let $U \subseteq \R^n$ be open and $f \in C^k(U, \R^n)$. Let $x_0 \in U$ be a point such that the differential $Df_{x_0}$ is strictly invertible (i.e., $\det(Jf(x_0)) \ne 0$).
+
+Then there exists an open neighborhood $U_0 \subseteq U$ around $x_0$ such that:
+\begin{enumerate}
+    \item $f|_{U_0}: U_0 \to f(U_0)$ is a $C^k$-diffeomorphism. \textcolor{eGray}{(It is locally invertible and smooth!)}
+    \item The differential of the inverse is the inverse of the differential: 
+    \[ D(f|_{U_0}^{-1})_{f(x)} = \left( D(f|_{U_0})_x \right)^{-1} \quad \forall x \in U_0 \]
+\end{enumerate}
+\end{theorem*}
+
+\gemininote{Intuition: If the derivative matrix is invertible, it means the function locally acts like a linear transformation that scales or rotates space, but it never \qt{flattens} a dimension down to zero. Because no information is destroyed (no dimensions are crushed), you can easily reverse the process—at least locally!}
+
+\begin{question*}
+\begin{enumerate}
+    \item If $f: \R^n \to \R^n$ is $C^k$ and a homeomorphism (bijective with continuous inverse), is it necessarily a $C^k$-diffeomorphism?
+    \item If $f \in C^\infty(U, \R^n)$ has an everywhere invertible differential ($Df_x$ invertible $\forall x \in U$), is $f$ a $C^\infty$-diffeomorphism onto its image?
+\end{enumerate}
+\end{question*}
+
+\begin{answer*}
+\textbf{1. False.} Consider $f: \R \to \R, x \mapsto x^3$. This function is bijective and continuous, and its inverse $f^{-1}(x) = x^{1/3}$ is also continuous. However, $f^{-1}$ is not differentiable at $x=0$, so it is not a diffeomorphism!
+
+\textbf{2. False.} Local invertibility does not guarantee global invertibility! Consider $f(x) = \cos(x)$ restricted to $\R \setminus \pi\Z$. For any $x$ in this domain, $f'(x) = -\sin(x) \ne 0$, so the differential is everywhere invertible. The IFT guarantees it is locally a diffeomorphism everywhere. But globally, cosine oscillates and hits the same values infinitely many times, so it is obviously not bijective onto $(-1, 1)$!
+\end{answer*}
+
+\hrulefill
+
+\section{The Implicit Function Theorem}
+
+\begin{theorem*}[Implicit Function Theorem]
+\textbf{Setup:} Let $n > n-d \ge 1$. Let $f \in C^k(\R^d \times \R^{n-d}, \R^{n-d})$. Suppose $f(x_0, y_0) = 0$ for some point. 
+Suppose $D_y f(x_0, y_0)$, the differential with respect to the $y$-variables, is bijective (i.e., $J_y f(x_0, y_0)$ is an invertible square matrix).
+
+\textbf{Consequence:} There exist open balls $B_r(x_0) \subseteq \R^d$ and $B_s(y_0) \subseteq \R^{n-d}$, and a $C^k$ function $g: B_r(x_0) \to B_s(y_0)$ such that for all points in this local window:
+\[ f(x,y) = 0 \iff y = g(x) \]
+Furthermore, the Jacobian of this new implicit function is:
+\[ Jg(x) = -\left( J_y f(x, g(x)) \right)^{-1} J_x f(x, g(x)) \]
+\end{theorem*}
+
+\gemininote{The TA wrote: \qt{The geometrical meaning of this formula eludes me, sorry.} But it's actually incredibly logical! It's just the Multivariable Chain Rule. We know that locally, $f(x, g(x)) = 0$. If we take the total derivative of both sides with respect to $x$, the Chain Rule gives:
+$J_x f + J_y f \cdot Jg = 0$. 
+Now just solve for $Jg$! Move $J_x f$ to the other side, and multiply from the left by the inverse of $J_y f$. That's it!}
+
+\begin{example*}[1. The Unit Circle]
+Consider $F(x,y) = x^2 + y^2 - 1 = 0$. Can we express $y$ as a function of $x$?
+Taking the $y$-derivative: $D_y F(x,y) = 2y$.
+This is invertible (non-zero) everywhere \emph{except} at $y=0$ (the points $(-1,0)$ and $(1,0)$). 
+Thus, for any point where $y \ne 0$, the IFT guarantees we can locally write $y(x) = \pm\sqrt{1-x^2}$. At $y=0$, the tangent is perfectly vertical, so it fails the vertical line test and cannot be written as $y(x)$.
+\end{example*}
+
+\begin{example*}[2. The Quintic Equation]
+Consider the level set $G^{-1}\set{0} = \set{(x,y) \in \R^2 : y^5 + y^3 + y + x = 0}$.
+Clearly, the origin $(0,0)$ is a solution since $0^5 + 0^3 + 0 + 0 = 0$.
+Check the partial derivatives at $(0,0)$:
+\begin{align*}
+    \partial_x G(0,0) &= 1 \ne 0 \\
+    \partial_y G(0,0) &= \left[ 5y^4 + 3y^2 + 1 \right]_{y=0} = 1 \ne 0
+\end{align*}
+Since $\partial_y G \ne 0$, the IFT guarantees that there exists an open interval around $x=0$ where we can uniquely write $y = g(x)$. 
+
+\textcolor{eSaddleBrown}{Why is this theorem so powerful?} By the famous Abel-Ruffini Theorem from Galois theory, there is mathematically \textbf{no general algebraic formula} to solve a polynomial of degree 5. You literally cannot write down $y(x)$ using standard roots. Yet, the Implicit Function Theorem mathematically guarantees that this function $y(x)$ exists, that it is perfectly smooth, and we can even compute its derivative without ever knowing the function's explicit formula!
+\end{example*}
+

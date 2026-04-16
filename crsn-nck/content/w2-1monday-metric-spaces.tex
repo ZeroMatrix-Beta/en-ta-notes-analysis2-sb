@@ -1,0 +1,142 @@
+\section{Metric Spaces}
+
+A \textbf{metric space} $(X, d)$ is any set $X$ equipped with a \textbf{metric}. 
+
+Formally, a metric is a function:
+\[ d: X \times X \to \mathbb{R}_{\ge 0} \]
+such that for all $x, y, z \in X$, the following three properties hold:
+
+\begin{enumerate}
+    \item \textbf{Definiteness:} $d(x,y) \ge 0$, with equality if and only if $x=y$. 
+    \\ \textcolor{eGray}{In words: \qt{the distance is positive, and a point has zero distance to itself.}} 
+    
+    \item \textbf{Symmetry:} $d(x,y) = d(y,x)$.
+    \\ \textcolor{eGray}{In words: \qt{$x$ has the same distance to $y$ as $y$ to $x$.}} 
+    
+    \item \textbf{Triangle Inequality:} $d(x,z) \le d(x,y) + d(y,z)$.
+    \\ \textcolor{eGray}{In words: \qt{detours make the way longer.}} 
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    % Triangle Inequality visual
+    \coordinate (X) at (0,0);
+    \coordinate (Y) at (2,1.5);
+    \coordinate (Z) at (4,0);
+
+    \draw[eMediumBlue, ->] (X) -- node[above left] {$d(x,y)$} (Y);
+    \draw[eMediumBlue, ->] (Y) -- node[above right] {$d(y,z)$} (Z);
+    \draw[eDarkRed, dashed, ->] (X) -- node[below] {$d(x,z) \le d(x,y) + d(y,z)$} (Z);
+
+    \fill[eSaddleBrown] (X) circle (2pt) node[left] {$x$};
+    \fill[eSaddleBrown] (Y) circle (2pt) node[above] {$y$};
+    \fill[eSaddleBrown] (Z) circle (2pt) node[right] {$z$};
+\end{tikzpicture}
+\end{center}
+
+\hrulefill
+
+\subsection*{Examples of Metric Spaces}
+
+\begin{example*}[The Discrete Metric]
+Let $X$ be any set. The discrete metric is given by:
+\[
+d(x,y) = 
+\begin{cases} 
+1 & \text{if } x \ne y \\ 
+0 & \text{if } x = y 
+\end{cases}
+\]
+\textcolor{eGray}{Note: This is super important for finding counterexamples!}
+\end{example*}
+
+\begin{example*}[Metrics in $\R^n$]
+We have many choices for a metric on $\R^n$. Some common ones are:
+\begin{itemize}
+    \item \textbf{Manhattan metric ($d_1$):} $d_1(x,y) = \sum_{k=1}^n \abs{x_k - y_k}$
+    \item \textbf{Standard/Euclidean metric ($d_2$):} $d_2(x,y) = \sqrt{\sum_{k=1}^n (x_k - y_k)^2}$
+    \item \textcolor{eDarkGreen}{\qt{Supremum metric}} \textbf{($d_3$ or $d_\infty$):} $d_3(x,y) = \sup_{k=1,\dots,n} \abs{x_k - y_k}$
+\end{itemize}
+\textcolor{eGray}{Generalization:} $d_m(x,y) = \sqrt[m]{\sum_{k=1}^n \abs{x_k - y_k}^m}$ is a metric on $\R^n$ for any $m \ge 1$.
+
+\begin{center}
+\textbf{Visualizing the Unit Balls in $\R^2$:} \\
+\vspace{0.3cm}
+\begin{tikzpicture}[scale=2]
+    % Axes
+    \draw[->, thick] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+    \draw[->, thick] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+    
+    % d3: Supremum (Square)
+    \draw[eDarkGreen, very thick, dashed] (-1,-1) rectangle (1,1);
+    \node[eDarkGreen] at (1.2, 1.2) {$d_3$ (Supremum)};
+    
+    % d2: Euclidean (Circle)
+    \draw[eMediumBlue, very thick] (0,0) circle (1cm);
+    \node[eMediumBlue] at (1.2, 0.5) {$d_2$ (Standard)};
+    
+    % d1: Manhattan (Diamond)
+    \draw[eDarkRed, very thick, dotted] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+    \node[eDarkRed] at (0.7, -0.7) {$d_1$ (Manhattan)};
+\end{tikzpicture}
+\end{center}
+\end{example*}
+
+\begin{example*}[Continuous Functions]
+Let $X = C^0([0,1], \R)$ denote the set of all continuous functions mapping the interval $[0,1]$ to $\R$. We can equip this space with the \textcolor{eDarkGreen}{\qt{Supremum Metric}}, defined for any two functions $f,g \in X$ as:
+\[ d(f,g) := \sup_{x \in [0,1]} \abs{f(x) - g(x)} \]
+\textcolor{eGray}{Intuition: This metric finds the single point $x$ where the two functions are furthest apart, and uses that maximum vertical gap as the distance between the two functions.}
+\end{example*}
+
+\begin{example*}[The n-Sphere]
+Let $X = S^2 := \set{ (x_1, x_2, x_3) \in \R^3 : x_1^2 + x_2^2 + x_3^2 = 1 }$ (the 2-dimensional sphere). 
+The closest path between two points on the sphere is an arc of a great circle (a geodesic). This defines a metric, similar to how straight lines define a metric on $\R^n$.
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+    % Sphere Outline
+    \draw[thick] (0,0) circle (1cm);
+    \draw[dashed] (1,0) arc (0:180:1cm and 0.3cm);
+    \draw (1,0) arc (0:-180:1cm and 0.3cm);
+    
+    % Points
+    \coordinate (X) at (-0.7, 0.4);
+    \coordinate (Y) at (0.6, 0.6);
+    
+    \fill[eSaddleBrown] (X) circle (1.5pt) node[left] {$x$};
+    \fill[eSaddleBrown] (Y) circle (1.5pt) node[right] {$y$};
+    
+    % Euclidean Distance (straight line cutting through sphere)
+    \draw[eDarkRed, dashed, thick] (X) -- node[below=0.2cm, sloped] {\small Euclidean distance} (Y);
+    
+    % Great Circle Distance (arc on surface)
+    \draw[eMediumBlue, very thick] (X) to[bend left=20] node[above, sloped] {\small distance on sphere} (Y);
+\end{tikzpicture}
+\end{center}
+\end{example*}
+
+\hrulefill
+\vspace{0.5cm}
+
+\begin{exercise*}
+Show that the supremum metric from Example 3 is indeed a metric.
+\end{exercise*}
+
+\begin{solution}
+Symmetry and definiteness are clear. For the triangle inequality, let $f, g, h \in C^0([0,1])$ and set:
+\[ p := f - h, \quad q := h - g \]
+Then for any $x \in [0,1]$, we know that:
+\[ \abs{p(x)} \le \sup \abs{p} \quad \text{and} \quad \abs{q(x)} \le \sup \abs{q} \]
+Adding these inequalities, for all $x \in [0,1]$ we get:
+\begin{equation}
+    \begin{aligned}
+        \abs{f(x) - g(x)} &= \abs{p(x) + q(x)} \\
+        &\le \abs{p(x)} + \abs{q(x)} \quad \text{\textcolor{eGray}{(standard triangle inequality in $\R$)}} \\
+        &\le \sup \abs{p} + \sup \abs{q} \\
+        &= \sup \abs{f - h} + \sup \abs{h - g}
+    \end{aligned}
+\end{equation}
+Since this final bound holds for \textcolor{eSaddleBrown}{every} $x \in [0,1]$, it must also hold for the supremum over all $x$. Thus:
+\[ d(f,g) \le d(f,h) + d(h,g) \]
+which proves the triangle inequality!
+\end{solution}

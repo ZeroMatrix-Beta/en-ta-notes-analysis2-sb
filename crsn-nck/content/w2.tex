@@ -1,0 +1,486 @@
+\setcounter{section}{0} 
+
+\section{Structured Spaces}
+
+This semester, you will be introduced to certain structures that can be given to a simple set (which we will often call a \qt{space} $X$ in this context). You can think of this as a hierarchy, where each level grants us more powerful mathematical tools:
+
+\begin{enumerate}
+    \item \textbf{Topological spaces:} \textcolor{eGray}{(Focus in the 4th semester)}
+    \item \textbf{Metric spaces $(X, d)$:} Defines a mere \emph{distance} between points. Important: $X$ does not necessarily have to be a vector space here! \textcolor{eGray}{(Focus in Analysis)}
+    \item \textbf{Normed vector spaces $(X, \norm{\cdot})$:} Defines the \emph{length} of a vector. This presupposes a linear structure (i.e., $X$ must be a vector space). \textcolor{eGray}{(Focus in LinAlg / Analysis)}
+    \item \textbf{Inner product spaces $(X, \langle \cdot, \cdot \rangle)$:} Defines both lengths and \emph{angles}! This is the richest structure. \textcolor{eGray}{(Focus in LinAlg)}
+\end{enumerate}
+
+\gemininote{Why is this hierarchy important? Because the more powerful structures automatically induce the weaker ones! An inner product always induces a norm via the formula $\norm{x} := \sqrt{\langle x, x \rangle}$. And a norm always induces a metric via the formula $d(x,y) := \norm{x - y}$. The reverse, however, is not generally true!}
+
+\hrulefill
+
+\section{Metric Spaces}
+
+A \textbf{metric space} $(X, d)$ is any set $X$ equipped with a \textbf{metric}. You can think of it as a universal ruler.
+
+Formally, a metric is a function:
+\[ d: X \times X \to \mathbb{R}_{\ge 0} \]
+such that for all points $x, y, z \in X$, the following three intuitive properties hold:
+
+\begin{enumerate}
+    \item \textbf{Definiteness:} $d(x,y) \ge 0$, and $d(x,y) = 0 \iff x=y$. 
+    \\ \textcolor{eGray}{In words: \qt{The distance is always positive, and a point has zero distance only to itself.}} 
+    
+    \item \textbf{Symmetry:} $d(x,y) = d(y,x)$.
+    \\ \textcolor{eGray}{In words: \qt{The path from you to me is exactly as long as the path from me to you.}} 
+    
+    \item \textbf{Triangle Inequality:} $d(x,z) \le d(x,y) + d(y,z)$.
+    \\ \textcolor{eGray}{In words: \qt{Taking a detour through a third point can never shorten your trip.}} 
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    \coordinate (X) at (0,0);
+    \coordinate (Y) at (2,1.5);
+    \coordinate (Z) at (4,0);
+
+    \draw[eMediumBlue, ->] (X) -- node[above left] {$d(x,y)$} (Y);
+    \draw[eMediumBlue, ->] (Y) -- node[above right] {$d(y,z)$} (Z);
+    \draw[eDarkRed, dashed, ->] (X) -- node[below] {$d(x,z) \le d(x,y) + d(y,z)$} (Z);
+
+    \fill[eSaddleBrown] (X) circle (2pt) node[left] {$x$};
+    \fill[eSaddleBrown] (Y) circle (2pt) node[above] {$y$};
+    \fill[eSaddleBrown] (Z) circle (2pt) node[right] {$z$};
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Examples of Metric Spaces}
+
+\begin{example*}[The Discrete Metric]
+Let $X$ be any set. The discrete metric is the \qt{digital} approach to measuring distance:
+\[
+d(x,y) = 
+\begin{cases} 
+1 & \text{if } x \ne y \\ 
+0 & \text{if } x = y 
+\end{cases}
+\]
+\gemininote{This metric is an extremely important tool for constructing counterexamples! It perfectly demonstrates that a metric does not have to match our intuitive geometric understanding of space.}
+\end{example*}
+
+\begin{example*}[Metrics in $\R^n$]
+We have many choices for measuring distance in $\R^n$. Some common ones are:
+\begin{itemize}
+    \item \textbf{Manhattan metric ($d_1$):} $d_1(x,y) = \sum_{k=1}^n \abs{x_k - y_k}$ \textcolor{eGray}{(Like a taxi navigating a city grid)}
+    \item \textbf{Standard/Euclidean metric ($d_2$):} $d_2(x,y) = \sqrt{\sum_{k=1}^n (x_k - y_k)^2}$ \textcolor{eGray}{(The classical straight-line distance)}
+    \item \textcolor{eDarkGreen}{\qt{Supremum metric}} \textbf{($d_3$ or $d_\infty$):} $d_3(x,y) = \sup_{k=1,\dots,n} \abs{x_k - y_k}$ \textcolor{eGray}{(Only the single largest coordinate difference matters)}
+\end{itemize}
+
+As a generalization: $d_m(x,y) = \sqrt[m]{\sum_{k=1}^n \abs{x_k - y_k}^m}$ is a valid metric on $\R^n$ for any $m \ge 1$.
+
+\begin{center}
+\textbf{Visualizing the \qt{Unit Balls} in $\R^2$:} \\
+\vspace{0.3cm}
+\begin{tikzpicture}[scale=2]
+    \draw[->, thick, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+    \draw[->, thick, eBlack] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+    
+    \draw[eDarkGreen, very thick, dashed] (-1,-1) rectangle (1,1);
+    \node[eDarkGreen] at (1.2, 1.2) {$d_\infty$ (Supremum)};
+    
+    \draw[eMediumBlue, very thick] (0,0) circle (1cm);
+    \node[eMediumBlue] at (1.2, 0.5) {$d_2$ (Standard)};
+    
+    \draw[eDarkRed, very thick, dotted] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+    \node[eDarkRed] at (0.7, -0.7) {$d_1$ (Manhattan)};
+\end{tikzpicture}
+\end{center}
+\end{example*}
+
+\begin{example*}[Continuous Functions]
+Let $X = C^0([0,1], \R)$ denote the set of all continuous functions mapping the interval $[0,1]$ to $\R$. We can equip this function space with the \textcolor{eDarkGreen}{\qt{Supremum Metric}}:
+\[ d(f,g) := \sup_{x \in [0,1]} \abs{f(x) - g(x)} \]
+\textcolor{eGray}{Intuition: This metric finds the single point $x$ where the two graphs are furthest apart, and defines that maximum vertical gap as the distance between the two functions.}
+\end{example*}
+
+\begin{example*}[The n-Sphere]
+Let $X = S^2 := \set{ (x_1, x_2, x_3) \in \R^3 : x_1^2 + x_2^2 + x_3^2 = 1 }$ (the 2-dimensional sphere). 
+The closest path between two points on the sphere is an arc of a great circle (a geodesic). This defines a unique metric on the surface, similar to how straight lines define a metric on $\R^n$.
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+    \draw[thick, eBlack] (0,0) circle (1cm);
+    \draw[dashed, eBlack] (1,0) arc (0:180:1cm and 0.3cm);
+    \draw[eBlack] (1,0) arc (0:-180:1cm and 0.3cm);
+    
+    \coordinate (X) at (-0.7, 0.4);
+    \coordinate (Y) at (0.6, 0.6);
+    
+    \fill[eSaddleBrown] (X) circle (1.5pt) node[left] {$x$};
+    \fill[eSaddleBrown] (Y) circle (1.5pt) node[right] {$y$};
+    
+    \draw[eDarkRed, dashed, thick] (X) -- node[below=0.2cm, sloped] {\small Euclidean distance} (Y);
+    \draw[eMediumBlue, very thick] (X) to[bend left=20] node[above, sloped] {\small Distance on sphere} (Y);
+\end{tikzpicture}
+\end{center}
+\geminiwarning{Terminology check: A sphere embedded in 3D space is actually a 2-dimensional surface, which is why topologists denote it as $S^2$. The script loosely refers to it as the \qt{n-sphere} here based on the ambient space.}
+\end{example*}
+
+\vspace{0.5cm}
+
+\begin{exercise*}
+Show that the supremum metric from the continuous functions example is indeed a metric.
+\end{exercise*}
+
+\begin{solution}
+Symmetry and definiteness follow directly from the properties of the absolute value $\abs{\cdot}$. For the triangle inequality, let's consider three functions $f, g, h \in C^0([0,1])$ and define two helpful auxiliary functions:
+\[ p := f - h, \quad q := h - g \]
+For any arbitrary but fixed $x \in [0,1]$, the value of the function at that specific point can never exceed the supremum of the entire function:
+\[ \abs{p(x)} \le \sup \abs{p} \quad \text{and} \quad \abs{q(x)} \le \sup \abs{q} \]
+If we now look at the distance between $f$ and $g$ at the point $x$, we can use the "add zero" trick and apply our inequalities:
+\begin{equation}
+    \begin{aligned}
+        \abs{f(x) - g(x)} &= \abs{p(x) + q(x)} \\
+        &\le \abs{p(x)} + \abs{q(x)} \quad \text{\textcolor{eGray}{(Standard triangle inequality in $\R$)}} \\
+        &\le \sup \abs{p} + \sup \abs{q} \\
+        &= \sup \abs{f - h} + \sup \abs{h - g}
+    \end{aligned}
+\end{equation}
+Because this upper bound holds for \textcolor{eSaddleBrown}{every single} $x \in [0,1]$, it must inherently also hold for the supremum taken over all $x$! Thus:
+\[ d(f,g) \le d(f,h) + d(h,g) \]
+This proves the triangle inequality.
+\end{solution}
+
+\hrulefill
+
+\section{Open and Closed Sets}
+
+Let $(X, d)$ be a metric space, let $x \in X$, and let $r \in \R_{>0}$. First, we define the \textcolor{eSaddleBrown}{\qt{open ball}} of radius $r$:
+\[ B_r(x) := \set{ y \in X : d(y,x) < r } \]
+\textcolor{eGray}{Note: Pay attention to the strict inequality ($<$). The boundary shell is not part of the ball!}
+
+\begin{definition*}
+\begin{itemize}
+    \item A subset $U \subseteq X$ is \textcolor{eDarkGreen}{\textbf{open}} iff for \emph{every} $y \in U$, we can find an $\eps > 0$ such that the entire ball $B_\eps(y)$ lies completely inside $U$. \textcolor{eGray}{(You can never accidentally step on the boundary.)}
+    \item A subset $A \subseteq X$ is \textcolor{eDarkRed}{\textbf{closed}} iff its complement $X \setminus A$ is open.
+\end{itemize}
+\end{definition*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, very thick]
+    \draw[eMediumBlue, fill=eMediumBlue!10, dashed] (0,0) .. controls (1,2) and (3,1) .. (4,0) .. controls (3,-2) and (1,-1) .. (0,0);
+    \node[eMediumBlue] at (3.5, 1) {\Large $U$};
+    
+    \coordinate (Y) at (1.5, 0);
+    \draw[eDarkGreen, fill=eDarkGreen!20, dashed] (Y) circle (0.6cm);
+    \fill[eSaddleBrown] (Y) circle (2pt) node[below] {$y$};
+    \draw[eDarkGreen, ->] (Y) -- ++(45:0.6cm) node[midway, above left] {$\eps$};
+    \node[eDarkGreen] at (2.5, -0.5) {$B_\eps(y) \subseteq U$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{exercise*}
+Let $(X,d)$ be a metric space. Show that the entire space $X$ and the empty set $\emptyset$ are both open and closed.
+\end{exercise*}
+
+\begin{solution}
+First, let's look at openness:
+\begin{itemize}
+    \item $X$ is open because for any $x \in X$ and any radius $r > 0$, the ball $B_r(x)$ is by definition a subset of $X$. Thus, $B_r(x) \subseteq X$ trivially holds.
+    \item $\emptyset$ contains no points. Therefore, the condition \qt{for every point $y \in \emptyset$ there exists...} is a vacuously true statement. Thus, the empty set is open.
+\end{itemize}
+Now for closedness:
+Since $X$ and $\emptyset$ are each other's complements in $X$ (i.e., $X \setminus X = \emptyset$ and $X \setminus \emptyset = X$), and we just proved both are open, they must both inherently be closed as well!
+\end{solution}
+
+\hrulefill
+
+\section{Sequences and Convergence}
+
+A sequence $(x_n)_{n=0}^\infty$ in a metric space $(X, d)$ is formally a function from $\N \to X$. We say that $(x_n)$ \textbf{converges} to a limit $x \in X$ if:
+\[ \forall \eps > 0, \exists N \in \N \text{ such that } d(x_n, x) < \eps \quad \forall n \ge N \]
+
+\subsection*{The Big Connection Proposition}
+Topological properties (openness/closedness) and the behavior of sequences go hand-in-hand:
+\begin{enumerate}
+    \item $U \subseteq X$ is \textbf{open} $\iff$ for every sequence in $X$ that has a limit in $U$, the sequence eventually lies entirely inside $U$.
+    \item $A \subseteq X$ is \textbf{closed} $\iff$ \emph{every} convergent sequence that lies entirely in $A$ must necessarily have its limit in $A$ as well. \textcolor{eGray}{(The sequence cannot \qt{break out} of the set.)}
+\end{enumerate}
+
+\subsection*{\warning{Watch out! A Common Misconception!}}
+Let's look at the standard Euclidean metric space $\R^2$. We know the square $[0,1]^2$ is closed and $(0,1)^2$ is open. (The rectangle $[0,1] \times (0,1)$ is neither open nor closed in $\R^2$).
+
+\textcolor{eDarkRed}{But...} what if our \textit{entire universe} (our metric space $X$) is defined strictly as $X := [0,1]^2$? 
+In the subspace $X = [0,1]^2$, the set $[0,1]^2$ is suddenly \emph{open}! 
+
+\textcolor{eDarkCyan}{Why?} Because the full space $X$ is always open within itself. If you take a point exactly on the boundary, its open $\eps$-ball consists only of points \textcolor{eSaddleBrown}{that actually exist in $X$}. The ball does not bleed out into $\R^2$ because $\R^2$ simply does not exist for this specific metric space!
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    \draw[->, eBlack] (-0.5, 0) -- (1.5, 0) node[right] {$x_1$};
+    \draw[->, eBlack] (0, -0.5) -- (0, 1.5) node[above] {$x_2$};
+    
+    \draw[eMediumBlue, fill=eMediumBlue!10] (0,0) rectangle (1,1);
+    \node[eMediumBlue] at (0.5, 0.5) {$X = [0,1]^2$};
+    
+    \coordinate (P) at (1, 0.3);
+    \fill[eDarkRed] (P) circle (1.5pt) node[right] {$x$};
+    \draw[eDarkRed, dashed] (P) circle (0.3cm);
+    
+    \begin{scope}
+        \clip (0,0) rectangle (1,1);
+        \fill[eDarkRed!40] (P) circle (0.3cm);
+    \end{scope}
+    
+    \node[eDarkRed, align=left, anchor=west] at (1.5, 0.5) {The $\eps$-ball in $X$ is \\ strictly the shaded region! \\ $B_\eps(x) \subseteq X$ is perfectly valid.};
+\end{tikzpicture}
+\end{center}
+
+\begin{exercise*}
+\begin{enumerate}
+    \item Write down the definition of convergence for a sequence of functions $(f_n)_{n=0}^\infty$ to $f$ in the metric space $X$ of bounded functions $[0,1] \to \R$ equipped with the supremum metric.
+    \item You know this resulting expression from Analysis 1. What kind of convergence is this called?
+    \item Use the fact that the space of continuous functions $C^0([0,1]) \subseteq X$ is closed, and combine it with the \qt{sequentially closed} proposition (part b) to conclude a massive result from Analysis 1.
+\end{enumerate}
+\end{exercise*}
+
+\begin{solution}
+\begin{enumerate}
+    \item $\forall \eps > 0 \, \exists N \in \N$ such that $\sup_{x \in [0,1]} \abs{f_n(x) - f(x)} < \eps \quad \forall n \ge N$.
+    \item This is exactly the definition of \textcolor{eDarkGreen}{\textbf{Uniform Convergence}}!
+    \item The fact that $C^0([0,1])$ is closed in the space of bounded functions means (according to our proposition above): If a sequence of continuous functions converges uniformly to a limit function $f$, then this limit function $f$ cannot leave the space of continuous functions. Ergo: \textbf{The uniform limit of continuous functions is always continuous!}
+    
+    \textcolor{eSaddleBrown}{Proof of closedness (The $\eps/3$-trick):} 
+    We show that the complement is open. Let $f \in X \setminus C^0([0,1])$. This means $f$ is bounded but has at least one discontinuity at a point $x_0$. That implies there is a real jump $\eps > 0$, such that no matter how close ($\delta$) we get to $x_0$, we can always find a $y$ where $\abs{f(x_0) - f(y)} \ge \eps$.
+    
+    Now we consider an open ball around this discontinuous function $f$, but we give it a tiny radius of $\eps/3$:
+    \[ B_{\eps/3}(f) = \set{g \in X : \sup_{x \in [0,1]} \abs{f(x) - g(x)} < \frac{\eps}{3}} \]
+    
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, very thick]
+        \draw[->, thick, eBlack] (-0.5, 0) -- (4, 0) node[right] {$x$};
+        \draw[->, thick, eBlack] (0, -0.5) -- (0, 3) node[above] {$y$};
+        \node[below left, eBlack] at (0,0) {$0$};
+        \draw[thick, eBlack] (3.5, 0.1) -- (3.5, -0.1) node[below] {$1$};
+        
+        \draw[eMediumBlue] (0, 0.5) to[out=0, in=180] (1.5, 0.2);
+        \draw[eMediumBlue] (1.5, 1.5) to[out=0, in=180] (3.5, 2.5);
+        
+        \fill[eMediumBlue] (1.5, 1.5) circle (1.5pt);
+        \fill[eMediumBlue, fill=white, draw=eMediumBlue, thick] (1.5, 0.2) circle (1.5pt);
+        
+        \draw[<->, eSaddleBrown] (1.5, 0.3) -- (1.5, 1.4) node[midway, right] {Jump $\eps$};
+        
+        \draw[eDarkRed, dashed] (0, 0.8) to[out=0, in=180] (1.5, 0.5);
+        \draw[eDarkRed, dashed] (0, 0.2) to[out=0, in=180] (1.5, -0.1);
+        \draw[eDarkRed, dashed] (1.5, 1.8) to[out=0, in=180] (3.5, 2.8);
+        \draw[eDarkRed, dashed] (1.5, 1.2) to[out=0, in=180] (3.5, 2.2);
+        
+        \draw[<->, eDarkRed] (2.5, 2.05) -- (2.5, 2.35) node[midway, right] {$\frac{\eps}{3}$};
+        \node[eMediumBlue] at (3.7, 2.5) {$f$};
+    \end{tikzpicture}
+    \end{center}
+    
+    This ball (the \qt{$\eps/3$-tube} around $f$) contains exclusively functions that are forced to replicate this jump. No function $g$ trapped inside this tube can possibly be continuous! Therefore, the entire ball $B_{\eps/3}(f)$ is contained within the complement $X \setminus C^0([0,1])$. Since the complement is open, $C^0([0,1])$ is closed!
+\end{enumerate}
+\end{solution}
+
+\hrulefill
+
+\section*{Friday}
+
+\begin{warmup}
+What is the shape of the open unit ball $B_1(0) \subseteq \R^2$ with:
+\begin{itemize}
+    \item The Supremum metric?
+    \item The Manhattan metric?
+\end{itemize}
+\end{warmup}
+
+\begin{answer*}\hfill\\ 
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    \node[eDarkCyan, font=\bfseries] at (0, 1.5) {Supremum ($d_\infty$):};
+    \draw[->, thick, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+    \draw[->, thick, eBlack] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+    
+    \draw[eDarkGreen, dashed] (-1,-1) rectangle (1,1);
+    \fill[eSaddleBrown] (0,1) circle (1.5pt) node[above right] {$(0,1)$};
+    \fill[eSaddleBrown] (1,0) circle (1.5pt) node[above right] {$(1,0)$};
+
+    \begin{scope}[xshift=4cm]
+        \node[eDarkCyan, font=\bfseries] at (0, 1.5) {Manhattan ($d_1$):};
+        \draw[->, thick, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+        \draw[->, thick, eBlack] (0,-1.5) -- (0,1.5) node[above] {$x_2$};
+        
+        \draw[eDarkRed, dashed] (1,0) -- (0,1) -- (-1,0) -- (0,-1) -- cycle;
+        \fill[eSaddleBrown] (0,1) circle (1.5pt) node[above right] {$(0,1)$};
+        \fill[eSaddleBrown] (1,0) circle (1.5pt) node[above right] {$(1,0)$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{answer*}
+
+\vspace{0.5cm}
+
+\begin{definition*}[Continuous functions]
+For two metric spaces $(X, d_X)$ and $(Y, d_Y)$, a function $f: X \to Y$ is called \emph{continuous} if one of the following, completely equivalent, conditions holds:
+
+\begin{enumerate}
+    \item \textbf{$(\eps-\delta)$-criterion:} $\forall x_0 \in X, \forall \eps > 0 \, \exists \delta > 0$ such that $\forall x \in X$:
+    \[ d_X(x_0, x) < \delta \implies d_Y(f(x_0), f(x)) < \eps \]
+    \textcolor{eGray}{(If you are close enough to $x_0$ in the starting space, you are guaranteed to land close to $f(x_0)$ in the target space.)}
+    
+    \item \textbf{Sequential continuity:} For any sequence $(x_n)_{n=0}^\infty$ in $X$ with a limit $x \in X$, it holds that:
+    \[ \lim_{n \to \infty} f(x_n) = f(x) \]
+    \textcolor{eGray}{(Continuous functions allow you to pull the limit inside the argument.)}
+    
+    \item \textbf{Topological continuity:} For all open sets $U \subseteq Y$, the preimage $f^{-1}(U) \subseteq X$ is \emph{open}.
+    \textcolor{eGray}{(Continuous functions preserve the topological structure when mapping backwards.)}
+\end{enumerate}
+\end{definition*}
+
+\begin{example*}
+Let $f: \R \to \R$, $x \mapsto x^2$ and let $(a,b) \subseteq \R$ be an interval. The preimage of this interval depends heavily on $a$ and $b$:
+\begin{itemize}
+    \item For $a < 0 < b$: $f^{-1}((a,b)) = (-\sqrt{b}, \sqrt{b})$. \textcolor{eGray}{(This is an open interval!)}
+    \item For $a < b < 0$: $f^{-1}((a,b)) = \emptyset$. \textcolor{eGray}{(The empty set is, as we proved, open!)}
+    \item For $0 < a < b$: $f^{-1}((a,b)) = (-\sqrt{b}, -\sqrt{a}) \cup (\sqrt{a}, \sqrt{b})$. \textcolor{eGray}{(A union of open intervals is open!)}
+\end{itemize}
+\textcolor{eDarkCyan}{Why is it enough to check only these simple basis intervals?} \\
+\textcolor{eGray}{Hint: The preimage perfectly respects unions: $f^{-1}(U_1 \cup U_2) = f^{-1}(U_1) \cup f^{-1}(U_2)$. Any open set on $\R$ can be constructed by patching together such intervals.}
+\end{example*}
+
+\vspace{0.5cm}
+
+\begin{question*}
+Consider functions mapping between two metric spaces $(X, d_X)$ and $(Y, d_Y)$.
+\begin{enumerate}
+    \item What happens if $d_Y$ is the discrete metric? Is a standard function like $f: (\R, d_{std}) \to (\R, d_{discrete})$ continuous?
+    \item And conversely: What if the starting space $d_X$ is discrete, and the target space $d_Y$ is entirely arbitrary?
+\end{enumerate}
+\end{question*}
+
+\begin{answer*}
+\begin{enumerate}
+    \item \textcolor{eDarkRed}{No, almost never.} Take the identity function $f(z) = z$ as an example. In the discrete space $Y$, even a single point like $\set{0}$ is an open set! Let's look at its preimage: $\text{Id}^{-1}(\set{0}) = \set{0}$. But a single point is definitely \textbf{not} open in the starting space with the standard metric $d_{std}$. The preimage of an open set is not open here, so the function is not continuous!
+    
+    \item \textcolor{eDarkGreen}{Yes, always!} In a discrete space, every single subset is open. This means that no matter what open set $U \subseteq Y$ you pick, its preimage $f^{-1}(U)$ is guaranteed to be open in $X$ (because \emph{everything} is open there). Any function mapping out of a discrete space is automatically continuous.
+\end{enumerate}
+\end{answer*}
+
+\hrulefill
+
+\section{Completeness and Compactness}
+
+\begin{definition*}[Cauchy Sequences \& Complete Metric Spaces]
+Let $(X, d)$ be a metric space, and $(x_n)_{n=0}^\infty$ a sequence in $X$. We call $(x_n)$ a \textcolor{eDarkGreen}{\textbf{Cauchy sequence}} if its terms get arbitrarily close to one another beyond a certain point:
+\[ \forall \eps > 0 \, \exists N \in \N \text{ such that } d(x_n, x_m) < \eps \quad \forall n, m \ge N \]
+
+A metric space $(X, d)$ is called a \textcolor{eDarkGreen}{\textbf{complete metric space}} if every Cauchy sequence in $X$ actually converges to a real limit within $X$.
+\end{definition*}
+
+\gemininote{Intuition for completeness: A Cauchy sequence desperately "wants" to converge. A space is incomplete if it sabotages this—for instance, if the space has \qt{holes} (like $\mathbb{Q}$) or is missing its boundary, meaning the sequence steers towards a limit that isn't actually there.}
+
+\begin{example*}
+\begin{itemize}
+    \item The Euclidean spaces $(\R^n, \langle \cdot, \cdot \rangle_{\text{eucl}})$ are complete.
+    \item Any non-closed subset $U \subseteq \R^n$ and the rational numbers $\mathbb{Q}$ are \emph{not} complete.
+    \item The space of continuous functions $(C^0([0,1]), \sup)$ is complete!
+\end{itemize}
+\end{example*}
+
+\begin{definition*}[Compactness]
+A metric space $(X, d)$ is compact if every wild, infinite open cover can be reduced to a \emph{finite} subcover.
+\end{definition*}
+
+\begin{theorem*}
+A metric space $(X, d)$ is compact if and only if \emph{every} sequence in $X$ has a subsequence that converges to a point in $X$.
+\end{theorem*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, very thick]
+    \draw[eMediumBlue, fill=eMediumBlue!5] (0.5,0.5) .. controls (-0.5,1.5) and (1,2.8) .. (2.5,2.5) .. controls (4.5,2.2) and (4,0) .. (2,0) .. controls (1,-0.5) and (0.8,0) .. cycle;
+    \node[eMediumBlue] at (4.2, 2.5) {\Large $X$};
+    
+    \draw[eDarkRed, dashed, fill=eDarkRed!10, fill opacity=0.3] (1.2, 0.4) circle (1.4cm);
+    \node[eDarkRed] at (1.2, -0.6) {$U_1$};
+    
+    \draw[eSaddleBrown, dashed, fill=eSaddleBrown!10, fill opacity=0.3] (2.8, 1.2) circle (1.6cm);
+    \node[eSaddleBrown] at (3.8, 0.8) {$U_2$};
+    
+    \draw[eMediumOrchid, dashed, fill=eMediumOrchid!10, fill opacity=0.3] (1.0, 1.8) circle (1.3cm);
+    \node[eMediumOrchid] at (0.0, 2.6) {$U_3$};
+    
+    \node[eDarkGray] at (2, -1.5) {$U_1 \cup U_2 \cup U_3 = X$};
+\end{tikzpicture}
+\end{center}
+
+\textcolor{eGray}{Note: A subset $K$ of a metric space $(X, d)$ is compact if the subspace $(K, d)$ is compact. This is strictly equivalent to the following prominent definition from the official script:}
+
+\vspace{0.5cm}
+
+% --- MAGIC COUNTER TRICK FOR DEF 9.63 ---
+\newcounter{tempSection}
+\setcounter{tempSection}{\value{section}}
+\newcounter{tempTheorem}
+\setcounter{tempTheorem}{\value{theorem}}
+
+\setcounter{section}{9}
+\setcounter{theorem}{62} 
+
+\begin{definition}[Compactness]
+Let $(X, d)$ be a metric space. A subset $K \subseteq X$ is called compact if one (and therefore both) of the following equivalent conditions hold:
+\begin{enumerate}
+    \item $K$ is \textcolor{eMediumBlue}{\qt{sequentially compact}}: every sequence $(x_n)_{n \in \N}$ in $K$ has a subsequence that is convergent in $K$.
+    \item $K$ is \textcolor{eMediumBlue}{\qt{topologically compact}}: every family of open sets $\set{U_i}_{i \in I}$ that cover $K$ has a \emph{finite} subcover.
+\end{enumerate}
+\end{definition}
+
+% --- RESTORE COUNTERS ---
+\setcounter{section}{\value{tempSection}}
+\setcounter{theorem}{\value{tempTheorem}}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, thick]
+    \draw[eDarkGray, dashed] (-3, -2) rectangle (5, 3);
+    \node[eDarkGray] at (4.5, 2.5) {$X$};
+
+    \draw[eDarkRed, fill=eDarkRed!20, rounded corners=15pt] (0,0) -- (1,2) -- (3,1.5) -- (2,-1) -- cycle;
+    \node[eDarkRed] at (1.5, 0.5) {\Large $K$};
+
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (0.2, 0.8) circle (1.2cm);
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (2.2, 0.5) circle (1.3cm);
+    \draw[eMediumBlue, dashed, fill=eMediumBlue!10, fill opacity=0.5, very thick] (1.2, -0.2) circle (1cm);
+    
+    \node[eMediumBlue] at (-0.5, 1.5) {$U_{\alpha_1}$};
+    \node[eMediumBlue] at (3.5, 1.2) {$U_{\alpha_2}$};
+    \node[eMediumBlue] at (1.2, -1.4) {$U_{\alpha_3}$};
+\end{tikzpicture}
+\end{center}
+\textcolor{eGray}{Important: The sets $U_i \subseteq X$ in the cover are always \emph{open sets} with respect to the ambient space $(X,d)$.}
+
+\vspace{0.5cm}
+
+\begin{exercises}
+\begin{enumerate}
+    \item Show that every finite subset $\set{x_1, \dots, x_n} \subseteq X$ is compact.
+    \item If a set $K$ is compact, is it automatically complete?
+\end{enumerate}
+\end{exercises}
+
+\begin{solution}\hfill\\ 
+\textbf{a)} Let's use topological compactness: Let $\set{U_\alpha}_{\alpha \in I}$ be an arbitrary open cover of $\set{x_1, \dots, x_n}$. Since these sets must cover all our points, we can simply pick \emph{one} set $U_{\alpha_i}$ from the massive pool for each point $x_i$ (from $i=1$ to $n$) such that $x_i \in U_{\alpha_i}$. 
+The collection $\set{U_{\alpha_1}, \dots, U_{\alpha_n}}$ is then a subcover. Because it consists of only $n$ (a finite number!) sets, we have found a finite subcover. Thus, the finite set is compact.
+
+\vspace{0.3cm}
+\textbf{b)} \textcolor{eDarkGreen}{Yes, absolutely.} Sequential compactness is perfect for this: Let $(x_n)_{n=0}^\infty$ be an arbitrary Cauchy sequence in $X$. Because $K$ is (sequentially) compact, this sequence \emph{must} have a convergent subsequence:
+\[ \lim_{i \to \infty} x_{n_i} = x \in X \]
+Now a fundamental trick of Cauchy sequences comes into play: If a Cauchy sequence agrees to converge even for a fraction of its terms (the subsequence), it forcibly drags the rest of the sequence along with it!
+
+Formally: Fix an $\eps > 0$. Because it is a Cauchy sequence, all terms move within $\eps$-distance of each other beyond some index $N_1$:
+\[ d(x_n, x_m) < \eps \quad \forall n, m > N_1 \]
+Because the subsequence converges to $x$, its terms move within $\eps$-distance of $x$ beyond some index $N_2$:
+\[ d(x, x_{n_i}) < \eps \quad \forall i > N_2 \]
+If we go far enough into the sequence (choosing $N := \max\set{N_1, N_2}$), we can estimate the distance of any arbitrary term $x_k$ (with $k > N$) to the limit $x$. We just cleverly insert an element $x_{n_k}$ of the convergent subsequence in between:
+\[ d(x, x_k) \le d(x, x_{n_k}) + d(x_{n_k}, x_k) < 2\eps \]
+\textcolor{eGray}{(Where of course $n_k \ge k > N$).} Since we can make the distance $2\eps$ arbitrarily small, the entire Cauchy sequence indeed converges to $x$. Thus, every compact space is always complete!
+\end{solution}

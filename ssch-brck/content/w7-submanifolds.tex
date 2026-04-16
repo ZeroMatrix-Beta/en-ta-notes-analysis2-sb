@@ -1,0 +1,367 @@
+\section{Submanifolds of $\mathbb{R}^n$}
+
+\begin{extra}
+\textbf{Gemini's Note: Building the Intuition}\\
+Before we tackle the formal mathematical definitions from the lecture, let's establish a geometric anchor. What exactly is a \qt{submanifold}? Think of it as a smooth, lower-dimensional geometric object living inside a higher-dimensional space. 
+\begin{itemize}
+    \item A 1D curve drawn on a 2D sheet of paper (like a circle).
+    \item A 2D surface floating in a 3D room (like a soap bubble or a piece of paper twisted into a cylinder).
+\end{itemize}
+The defining feature of any manifold is that if you zoom in close enough to any point, the surface looks \emph{perfectly flat}. A 2D sphere looks exactly like a flat 2D plane if you are an ant standing on it. The formal mathematics below just provides us with three different ways to rigorously prove this \qt{locally flat} property!
+\end{extra}
+
+\subsection{Submanifold Charts (The Flattening Map)}
+
+To prove a space is a manifold, we can show that we can mathematically \qt{flatten} it out.
+
+% 1. Save current document state
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+
+% 2. Jump to Script Dimension
+\setcounter{section}{12}
+\setcounter{theorem}{9} % Set to one less than target (12.10)
+
+\begin{definition}[Submanifold of $\mathbb{R}^n$]
+Given integers $0 < d < n$ and $k \ge 1$. We say that a nonempty subset $M \subset \mathbb{R}^n$ is a \qt{$d$-dimensional submanifold of $\mathbb{R}^n$ of class $C^k$} if, for every point $p_0 \in M$, there exists:
+\begin{itemize}
+    \item an open set $U \subset \mathbb{R}^n$ containing $p_0$,
+    \item an open set $V \subset \mathbb{R}^n$ containing $0$,
+    \item and a $C^k$-diffeomorphism $\Psi : U \to V$
+\end{itemize}
+such that:
+\[
+\Psi(M \cap U) = \{y \in V \mid y_{d+1} = y_{d+2} = \dots = y_n = 0\}
+\]
+The map $\Psi$ is called a \textbf{submanifold chart}.
+\end{definition}
+
+% 3. Instantly Restore Document State
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+\begin{extra}
+\textbf{Gemini's Note: Unpacking the Chart}\\
+Your TA perfectly summarizes the core concept here: \emph{\qt{Essentially, only $y_1, \dots, y_d$ define our submanifold.}} 
+
+Imagine the diffeomorphism $\Psi$ acting as a magical \qt{flattening iron}. It takes the curvy, twisted piece of the manifold $M \cap U$ and perfectly irons it out flat onto the coordinate axes in the target space $V$. Because our manifold is $d$-dimensional, all the extra coordinates beyond $d$ (from $y_{d+1}$ up to $y_n$) are simply flattened to zero.
+\end{extra}
+
+% --- TIKZ 1: THE FLATTENING IRON ---
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+    % LEFT SIDE: The Curvy Submanifold in R^n
+    \node[anchor=south] at (-1.5, 3.0) {\textbf{Original Space $\mathbb{R}^3$}};
+    
+    % Axes
+    \draw[->, thick, eGray] (-3,0) -- (-0.5,0) node[right] {$x_2$};
+    \draw[->, thick, eGray] (-2,-1) -- (-2,2.5) node[above] {$x_3$};
+    \draw[->, thick, eGray] (-2,0) -- (-3.5,-1.5) node[below left] {$x_1$};
+    
+    % Open set U (dashed blob)
+    \draw[dashed, very thick, eGray, fill=eLightGray, fill opacity=0.2] 
+        (-2, 0.5) circle (1.5);
+    \node[eGray, anchor=north west] at (-0.8, 2.0) {$U$};
+    
+    % Manifold M cap U (wavy surface)
+    \draw[very thick, eMediumBlue, fill=eMediumBlue, fill opacity=0.4] 
+        (-3, 0) .. controls (-2.5, 1) and (-1.5, 0) .. (-1, 1) 
+        .. controls (-1.2, 1.8) and (-2, 2) .. (-2.5, 1.5) 
+        .. controls (-3, 1) .. (-3, 0);
+        
+    \node[eMediumBlue, anchor=south east] at (-2.3, 1.1) {$M \cap U$};
+    
+    % Point p_0
+    \fill[eDarkRed] (-2.2, 0.8) circle (2pt) node[anchor=north west, xshift=1pt, yshift=-1pt] {$p_0$};
+    
+    % THE MAPPING ARROW
+    \draw[->, very thick, eDarkRed] (-0.2, 1.5) to[bend left=15] node[midway, above] {$\Psi$ (Diffeomorphism)} (2.5, 1.5);
+    \node[font=\small, text=eGray] at (1.15, 0.8) {\qt{The Flattening Iron}};
+
+    % RIGHT SIDE: The Flattened Manifold in R^n
+    \node[anchor=south] at (4.5, 3.0) {\textbf{Chart Space $\mathbb{R}^3$}};
+    
+    % Axes
+    \draw[->, thick, eGray] (3,0) -- (6.5,0) node[right] {$y_2$};
+    \draw[->, thick, eGray] (4,-1) -- (4,2.5) node[above] {$y_3$};
+    \draw[->, thick, eGray] (4,0) -- (2.5,-1.5) node[below left] {$y_1$};
+    
+    % Open set V
+    \draw[dashed, very thick, eGray, fill=eLightGray, fill opacity=0.2] 
+        (4, 0.5) circle (1.5);
+    \node[eGray, anchor=south east] at (5.5, 1.8) {$V$};
+    
+    % Flattened Manifold (perfectly flat on the y1-y2 plane, y3=0)
+    \draw[very thick, eSaddleBrown, fill=eGold, fill opacity=0.5] 
+        (3.0, -0.6) -- (5.2, -0.6) -- (5.0, 0.6) -- (2.8, 0.6) -- cycle;
+        
+    \node[eSaddleBrown, anchor=south west] at (5.2, -0.4) {$\Psi(M \cap U)$};
+    \node[eSaddleBrown, anchor=north west, font=\small] at (5.2, -0.4) {($y_3 = 0$)};
+    
+    % Mapped Point 0
+    \fill[eDarkRed] (4, 0) circle (2pt) node[anchor=south east, xshift=-2pt, yshift=2pt] {$0$};
+    
+\end{tikzpicture}
+\end{center}
+
+\subsection{Equivalent Local Representations}
+
+There are multiple valid ways to mathematically describe a submanifold. Depending on the calculus problem at hand, you must flexibly switch between them.
+
+% 1. Save current document state
+\setcounter{savedSec}{\value{section}}
+\setcounter{savedThm}{\value{theorem}}
+
+% 2. Jump to Script Dimension
+\setcounter{section}{12}
+\setcounter{theorem}{11} % Set to one less than target (12.12)
+
+\begin{proposition}[Different Local Representations of Submanifold]
+Let $0 < d < n$ and $k \ge 1$ be integers, and let $M \subset \mathbb{R}^n$ be a nonempty subset. The following four are equivalent:
+\begin{enumerate}
+    \item $M \subset \mathbb{R}^n$ is a $d$-dimensional submanifold.
+    
+    \item \textbf{(Implicit representation):} For all $p_0 \in M$ there are $U \subset \mathbb{R}^n$ open containing $p_0$ and $f \in C^k(U, \mathbb{R}^{n-d})$ such that $Df_{p_0}$ has maximal rank (i.e., has rank $n-d$), and
+    \[
+    M \cap U = \{x \in U \mid f(x) = 0\}.
+    \]
+    
+    \item \textbf{(Parametric representation):} For all $p_0 \in M$ there is $V \subset \mathbb{R}^d$ open, $y_0 \in V$ and $G \in C^k(V, \mathbb{R}^n)$ such that $G(y_0) = p_0$, $DG_{y_0}$ has maximal rank (i.e., has rank $d$), and, in addition, for all $V' \subset V$ open there is $U' \subset \mathbb{R}^n$ open such that 
+    \[
+    M \cap U' = G(V').
+    \]
+    
+    \item \textbf{(Graphical representation):} There are $U \subset \mathbb{R}^n$ open containing $p_0$, $V \subset \mathbb{R}^d$ open, and $g \in C^k(V, \mathbb{R}^{n-d})$ such that
+    \[
+    M \cap U = P(\text{graph}(g))
+    \]
+    where $P : \mathbb{R}^n \to \mathbb{R}^n$ is some permutation of the coordinates and 
+    \[
+    \text{graph}(g) := \{x \in V \times \mathbb{R}^{n-d} \mid (x_{d+1}, \dots, x_n) = g(x_1, \dots, x_d)\} \subset \mathbb{R}^n.
+    \]
+\end{enumerate}
+\end{proposition}
+
+% 3. Instantly Restore Document State
+\setcounter{section}{\value{savedSec}}
+\setcounter{theorem}{\value{savedThm}}
+
+\begin{extra}
+\textbf{Gemini's Note: Implicit vs. Parametric \& The Power of Permutation}\\
+Your TA's annotations cut right to the core of how to use this proposition practically:
+\begin{itemize}
+    \item \textbf{From \textbf{(b)} (Implicit):} As noted, this is \qt{same as \textbf{(a)} but we define the diffeo implicitly}. You carve out the manifold by applying equations ($f(x)=0$) to restrict the ambient space.
+    \item \textbf{From \textbf{(c)} (Parametric):} The TA notes this is \qt{using params, most intuitive}. You build the manifold by mapping a flat, lower-dimensional space upwards into $\mathbb{R}^n$.
+    \item \textbf{The Power of Permutation in \textbf{(d)}:} Any smooth curve locally looks like a function graph $y=g(x)$. But what if the curve is strictly vertical? A vertical line fails the vertical-line test and isn't a function. \textbf{This is where the permutation $P$ gives you power:} it is simply a mathematical permission slip to swap the axes! If $y=g(x)$ fails, you apply $P$ to swap the coordinates and successfully write it as $x=g(y)$ instead. 
+\end{itemize}
+\end{extra}
+
+% --- TIKZ 2: IMPLICIT VS PARAMETRIC ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    
+    % --- IMPLICIT REPRESENTATION ---
+    \node[anchor=south] at (1.5, 2.5) {\textbf{\textbf{(b)} Implicit}};
+    \node[font=\small, text=eGray, anchor=south] at (1.5, 2.0) {\emph{Carving out by constraints}};
+    
+    \draw[->, thick, eGray] (0,-1) -- (3.5,-1);
+    \draw[->, thick, eGray] (1.5,-2.5) -- (1.5,1.0);
+    
+    % The Manifold (Circle)
+    \draw[very thick, eMediumBlue] (1.5, -1) circle (1.2);
+    \node[eMediumBlue, anchor=south west, fill=white, inner sep=1pt] at (2.4, -0.2) {$f(x) = 0$};
+    
+    % Gradients pushing inward/outward (Constraints)
+    \draw[->, very thick, eDarkRed] (2.7, -1) -- (3.4, -1);
+    \draw[->, very thick, eDarkRed] (1.5, 0.2) -- (1.5, 0.9);
+    \draw[->, very thick, eDarkRed] (0.3, -1) -- (-0.4, -1);
+    \node[eDarkRed, anchor=south west] at (3.3, -1) {$\nabla f$};
+    
+    % --- PARAMETRIC REPRESENTATION ---
+    \node[anchor=south] at (8.5, 2.5) {\textbf{\textbf{(c)} Parametric}};
+    \node[font=\small, text=eGray, anchor=south] at (8.5, 2.0) {\emph{Drawing from parameters}};
+    
+    % Parameter Domain (1D line)
+    \draw[very thick, eSaddleBrown] (5.5, -2.5) -- (5.5, 0.5);
+    \node[eSaddleBrown, anchor=south] at (5.5, 0.5) {$V \subset \mathbb{R}^1$};
+    
+    \fill[eDarkRed] (5.5, -1) circle (2.5pt) node[anchor=east, xshift=-3pt] {$y_0$};
+    
+    % Mapping G Arrow
+    \draw[->, very thick, eDarkRed] (6.0, -1) to[bend left=25] node[midway, above] {$G$} (7.3, -0.2);
+    
+    % Target Space R^2
+    \draw[->, thick, eGray] (7.5,-1) -- (11.0,-1);
+    \draw[->, thick, eGray] (9.0,-2.5) -- (9.0,1.0);
+    
+    % Drawn Manifold (Circle)
+    \draw[very thick, eMediumBlue] (9.0, -1) circle (1.2);
+    \node[eMediumBlue, anchor=north west, fill=white, inner sep=1pt] at (9.8, -1.8) {$M = G(V')$};
+    
+    % Target Point
+    \fill[eDarkRed] (9.0, 0.2) circle (2.5pt) node[anchor=south west, xshift=2pt] {$p_0$};
+    
+\end{tikzpicture}
+\end{center}
+
+
+\subsection{A Zoo of Submanifolds: Choosing the Right Tool}
+
+Although the four representations in Proposition 12.12 are mathematically equivalent, in practice, one method is usually vastly superior depending on the geometry of $M$. 
+
+\begin{example}[The Trivial Case: A Straight Line]
+Consider the line $y = 2x$ in $\mathbb{R}^2$. This is the simplest possible 1D submanifold. 
+\begin{itemize}
+    \item \textbf{(Graphical):} It is already explicitly given as a global graph $g(x) = 2x$. A permutation $P$ is not even needed.
+    \item \textbf{(Implicit):} We can define it as $f(x,y) = 2x - y = 0$. The gradient $\nabla f = (2, -1)$ trivially has rank 1 everywhere.
+\end{itemize}
+\end{example}
+
+\begin{example}[The Masterclass: The Unit Circle]
+The circle $M = \mathbb{S}^1 \subset \mathbb{R}^2$ ($d=1, n=2$) is the perfect example because it forces us to use all tools locally:
+\begin{itemize}
+    \item \textbf{(Implicit):} Defined globally by one constraint $f(x, y) = x^2 + y^2 - 1 = 0$. The Jacobian $Df = (2x, 2y)$ has maximal rank 1 everywhere on $M$.
+    \item \textbf{(Parametric):} Easily drawn using an angle $\theta$: $G(\theta) = (\cos\theta, \sin\theta)^T$.
+    \item \textbf{(Graphical \& Permutation):} At the \qt{North Pole} $(0,1)$, the circle is locally the graph $y = g(x) = \sqrt{1-x^2}$. However, at the \qt{Equator} $(1,0)$, the tangent is vertical. We \emph{must} apply the permutation $P(x,y) = (y,x)$ to swap the axes, allowing us to successfully write the local graph as $x = g(y) = \sqrt{1-y^2}$.
+\end{itemize}
+\end{example}
+
+\begin{example}[When Graphical \& Permutation Win: The Sideways Parabola]
+Let $M = \{(x,y) \in \mathbb{R}^2 \mid x = y^2\}$. 
+\begin{itemize}
+    \item If we attempt to represent this classically as a \textbf{graph} $y = h(x)$ at the origin $p_0 = (0,0)$, we fail miserably: The curve splits into $y = \pm\sqrt{x}$ and the derivative approaches infinity. The vertical tangent destroys the function property!
+    \item \textbf{The Solution via Permutation (d):} This is where point \textbf{(d)} shines. We apply the permutation $\sigma(x,y) = (y,x)$, conceptually swapping the axes. Suddenly, the set is locally (and globally) the perfect, infinitely differentiable graph of $x = h(y) = y^2$.
+\end{itemize}
+\end{example}
+
+% --- TIKZ: THE SIDEWAYS PARABOLA ---
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+    % Axes
+    \draw[->, thick, eGray] (-1,0) -- (3.5,0) node[right] {$x$};
+    \draw[->, thick, eGray] (0,-2.5) -- (0,2.5) node[above] {$y$};
+    
+    % The Parabola x = y^2
+    \draw[very thick, eMediumBlue, variable=\y, domain=-1.8:1.8, samples=100] 
+        plot ({\y*\y}, {\y});
+    \node[eMediumBlue, anchor=west] at (3.5, 1.8) {$M: x = y^2$};
+    
+    % The Problem: Vertical Tangent
+    \draw[dashed, very thick, eDarkRed] (0,-2) -- (0,2);
+    \fill[eDarkRed] (0,0) circle (2.5pt) node[anchor=north west] {$p_0$};
+    
+    % Explanation Box
+    \node[align=left, font=\small, eDarkGray, anchor=west] at (1.5, -1.5) {
+        At $p_0$, $y = h(x)$ fails \\
+        (vertical tangent).\\
+        \textbf{But:} $x = h(y)$ works \\
+        perfectly via permutation!
+    };
+\end{tikzpicture}
+\end{center}
+
+\begin{example}[When Parametric Wins: The 3D Helix]
+Consider a spring (helix) spiraling upwards in $\mathbb{R}^3$. 
+Attempting to represent this \textbf{implicitly} is a nightmare: You would need to define two surfaces that perfectly intersect exactly along the spring, and prove their gradients are always linearly independent.
+However, the \textbf{parametric} representation \textbf{(c)} is beautifully simple. We only need $d=1$ parameter $t$:
+\[
+G(t) = \begin{pmatrix} \cos t \\ \sin t \\ t \end{pmatrix}
+\]
+Its Jacobian $DG = (-\sin t, \cos t, 1)^T$ is never the zero vector (since the $z$-component is always 1), guaranteeing maximal rank 1 everywhere.
+\end{example}
+
+% --- TIKZ: THE 3D HELIX ---
+\begin{center}
+\begin{tikzpicture}[x={(-0.5cm,-0.4cm)}, y={(1cm,0cm)}, z={(0cm,1cm)}, scale=1.5]
+    % 3D Axes
+    \draw[->, thick, eGray] (0,0,0) -- (2,0,0) node[left] {$x$};
+    \draw[->, thick, eGray] (0,0,0) -- (0,2,0) node[right] {$y$};
+    \draw[->, thick, eGray] (0,0,0) -- (0,0,4.5) node[above] {$z$};
+    
+    % The Helix
+    \draw[very thick, eMediumOrchid, variable=\t, domain=0:4.5*pi, samples=150] 
+        plot ({cos(\t r)}, {sin(\t r)}, {\t/3});
+        
+    % Parameterization label
+    \node[eMediumOrchid, anchor=west] at (0, 1.2, 3) {$G(t)$};
+    
+    \node[font=\small, eGray, anchor=north] at (0, 0, -1) {A helix is extremely easy to \qt{draw} (parameterize).};
+\end{tikzpicture}
+\end{center}
+
+\begin{example}[When Implicit Wins: The 2D Sphere]
+Consider the surface of a ball $M = \mathbb{S}^2 \subset \mathbb{R}^3$. 
+Using a \textbf{parametric} representation \textbf{(c)} is problematic. If you use spherical coordinates (longitude and latitude), the math breaks down at the North and South poles (the Jacobian loses rank because all longitudes collapse to a single point). You would need multiple overlapping charts to patch the sphere together.
+Instead, the \textbf{implicit} representation \textbf{(b)} solves the whole surface globally with one elegant constraint ($n-d = 3-2 = 1$ equation):
+\[
+f(x,y,z) = x^2 + y^2 + z^2 - 1 = 0
+\]
+The gradient $\nabla f = (2x, 2y, 2z)$ is never $(0,0,0)$ on the sphere, thus it always has full rank 1.
+\end{example}
+
+\begin{example}[The Perfect Graph: The Saddle]
+Consider the hyperbolic paraboloid (a saddle) in $\mathbb{R}^3$, defined by $z = x^2 - y^2$.
+\begin{itemize}
+    \item \textbf{(Graphical):} This is an absolute dream for the graphical representation \textbf{(d)}. We need no permutation because $M$ is already globally given as an exact graph $z = g(x,y) = x^2 - y^2$.
+    \item \textbf{(Implicit):} Also very simple: $f(x,y,z) = x^2 - y^2 - z = 0$. The gradient is $\nabla f = (2x, -2y, -1)$. Since the $z$-component is always $-1$, the vector can never be $(0,0,0)$. The rank is thus maximal (1) everywhere.
+\end{itemize}
+\end{example}
+
+\begin{example}[The Parametric Triumph: The Torus]
+A torus (donut) is a 2D submanifold in $\mathbb{R}^3$.
+\begin{itemize}
+    \item \textbf{(Implicit):} Very ugly. The equation is $(x^2+y^2+z^2+R^2-r^2)^2 - 4R^2(x^2+y^2) = 0$. Finding the gradient and checking for zero vectors is a tedious algebraic exercise.
+    \item \textbf{(Parametric):} Wins flawlessly! A torus is intuitively drawn using two angles (parameters). Let $\theta$ be the angle around the Z-axis and $\varphi$ be the angle around the tube:
+    \[
+    G(\theta, \varphi) = \begin{pmatrix} (R + r \cos \varphi) \cos \theta \\ (R + r \cos \varphi) \sin \theta \\ r \sin \varphi \end{pmatrix}
+    \]
+    The dimension of the parameter space is $d=2$, which perfectly matches the dimension of the manifold.
+\end{itemize}
+\end{example}
+
+\begin{example}[The Anti-Example: The Double Cone]
+To understand why the \qt{maximal rank} condition in Proposition 12.12 is so crucial, consider the double cone:
+\[ M = \{(x,y,z) \in \mathbb{R}^3 \mid x^2 + y^2 - z^2 = 0\} \]
+Is this a 2D submanifold? Let's check condition \textbf{(b)} (Implicit):
+We have $f(x,y,z) = x^2 + y^2 - z^2 = 0$. We compute the gradient:
+\[ \nabla f = (2x, 2y, -2z) \]
+Now consider the origin $p_0 = (0,0,0)$, which clearly lies on the cone. There we get:
+\[ \nabla f(0,0,0) = (0, 0, 0) \]
+The rank of the Jacobian matrix (here the gradient) drops to $0$ at the origin. It is not maximal! \\
+\textbf{Conclusion:} The cone is \emph{not} a manifold at the origin. Geometrically, this makes sense: At the origin, the cone has an infinitely sharp singularity. It cannot be \qt{ironed flat} as required by condition \textbf{(a)}.
+\end{example}
+
+% --- TIKZ 3: THE ZOO (SADDLE & CONE) ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    
+    % --- LEFT: SADDLE ---
+    \node[anchor=south, font=\bfseries] at (-3.5, 2.5) {The Saddle (Graphical)};
+    
+    % Saddle approximation
+    \draw[very thick, eMediumBlue] (-5,0.5) .. controls (-4,-0.5) and (-3,-0.5) .. (-2,0.5);
+    \draw[very thick, eMediumBlue] (-5,0.5) .. controls (-4.5,1.5) and (-2.5,1.5) .. (-2,0.5);
+    \draw[thick, eGray] (-3.5, 0.3) -- (-3.5, -1.5) node[below] {$z = x^2 - y^2$};
+    
+    \node[eMediumBlue, font=\small] at (-3.5, 1.8) {Global Graph!};
+    
+    % --- RIGHT: CONE (NON-EXAMPLE) ---
+    \node[anchor=south, font=\bfseries] at (3.5, 2.5) {The Cone (Anti-Example)};
+    
+    % Cone top
+    \draw[very thick, eDarkRed] (2, 2) ellipse (1.2 and 0.3);
+    % Cone bottom
+    \draw[very thick, eDarkRed] (2, -1) ellipse (1.2 and 0.3);
+    % Cone sides
+    \draw[very thick, eDarkRed] (0.8, 2) -- (3.2, -1);
+    \draw[very thick, eDarkRed] (3.2, 2) -- (0.8, -1);
+    
+    % Singularity point
+    \fill[eBlack] (2, 0.5) circle (3pt);
+    \draw[->, thick, eBlack] (3.5, 0.5) -- (2.2, 0.5);
+    \node[eBlack, anchor=west, font=\small] at (3.6, 0.5) {$\nabla f = (0,0,0)$};
+    \node[eDarkRed, anchor=west, font=\small] at (3.6, 0.1) {Singularity!};
+    \node[eDarkGray, anchor=north] at (2, -1.5) {$x^2 + y^2 - z^2 = 0$};
+
+\end{tikzpicture}
+\end{center}
