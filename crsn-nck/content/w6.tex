@@ -43,10 +43,13 @@ Let $U \subseteq \R^n$ be open and convex, and $f \in C^1(U)$.
 \begin{solution}\hfill\\
 \textbf{a) The 1D Reduction} \\
 Let $f_{x,y}$ be convex. We want to show $f$ is convex.
-\begin{align*}
+\begin{equation}
+\begin{aligned}
     f_{x,y}((1-t)s_0 + t s_1) &\le (1-t)f_{x,y}(s_0) + t f_{x,y}(s_1) \\
     f(x + [(1-t)s_0 + t s_1](y-x)) &\le (1-t)f(x + s_0(y-x)) + t f(x + s_1(y-x)) 
-\end{align*}
+\end{aligned}
+\end{equation}
+
 If we simply set $s_0 = 0$ and $s_1 = 1$, the right side simplifies to $(1-t)f(x) + t f(y)$, and the left side simplifies exactly to $f((1-t)x + ty)$. This immediately proves $f$ is convex!
 Vice versa, if $f$ is convex, the convexity of $f_{x,y}$ follows by applying the convexity of $f$ to the two points $u = x + s_0(y-x)$ and $v = x + s_1(y-x)$.
 
@@ -97,7 +100,7 @@ Then there exists an open neighborhood $U_0 \subseteq U$ around $x_0$ such that:
 \begin{answer*}
 \textbf{1. False.} Consider $f: \R \to \R, x \mapsto x^3$. This function is bijective and continuous, and its inverse $f^{-1}(x) = x^{1/3}$ is also continuous. However, $f^{-1}$ is not differentiable at $x=0$, so it is not a diffeomorphism!
 
-\textbf{2. False.} Local invertibility does not guarantee global invertibility! Consider $f(x) = \cos(x)$ restricted to $\R \setminus \pi\Z$. For any $x$ in this domain, $f'(x) = -\sin(x) \ne 0$, so the differential is everywhere invertible. The IFT guarantees it is locally a diffeomorphism everywhere. But globally, cosine oscillates and hits the same values infinitely many times, so it is obviously not bijective onto $(-1, 1)$!
+\textbf{2. False.} Local invertibility does not guarantee global invertibility! Consider $f(x) = \cos(x)$ restricted to $\R \setminus \pi\mathbb{Z}$. For any $x$ in this domain, $f'(x) = -\sin(x) \ne 0$, so the differential is everywhere invertible. The IFT guarantees it is locally a diffeomorphism everywhere. But globally, cosine oscillates and hits the same values infinitely many times, so it is obviously not bijective onto $(-1, 1)$!
 \end{answer*}
 
 \hrulefill
@@ -129,12 +132,174 @@ Thus, for any point where $y \ne 0$, the IFT guarantees we can locally write $y(
 Consider the level set $G^{-1}\set{0} = \set{(x,y) \in \R^2 : y^5 + y^3 + y + x = 0}$.
 Clearly, the origin $(0,0)$ is a solution since $0^5 + 0^3 + 0 + 0 = 0$.
 Check the partial derivatives at $(0,0)$:
-\begin{align*}
+\begin{equation}
+\begin{aligned}
     \partial_x G(0,0) &= 1 \ne 0 \\
     \partial_y G(0,0) &= \left[ 5y^4 + 3y^2 + 1 \right]_{y=0} = 1 \ne 0
-\end{align*}
+\end{aligned}
+\end{equation}
 Since $\partial_y G \ne 0$, the IFT guarantees that there exists an open interval around $x=0$ where we can uniquely write $y = g(x)$. 
 
 \textcolor{eSaddleBrown}{Why is this theorem so powerful?} By the famous Abel-Ruffini Theorem from Galois theory, there is mathematically \textbf{no general algebraic formula} to solve a polynomial of degree 5. You literally cannot write down $y(x)$ using standard roots. Yet, the Implicit Function Theorem mathematically guarantees that this function $y(x)$ exists, that it is perfectly smooth, and we can even compute its derivative without ever knowing the function's explicit formula!
 \end{example*}
 
+\setcounter{section}{5} % Week 6
+
+\section{Convexity}
+
+\begin{definition*}[Convex Sets and Functions]
+\begin{itemize}
+    \item A subset $A \subseteq \R^n$ is \textbf{convex} if for any $x, y \in A$ and any $t \in [0,1]$, the point $p = (1-t)x + ty$ is also an element of $A$. \textcolor{eGray}{(Intuitively: The straight line segment connecting any two points in the set lies entirely within the set.)}
+    
+    \item A function $f: A \to \R$ is \textbf{convex} if its domain $A$ is a convex set, and for all $x, y \in A$ and $t \in [0,1]$:
+    \[ f((1-t)x + ty) \le (1-t)f(x) + t f(y) \]
+\end{itemize}
+\end{definition*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    % Axes
+    \draw[->, eBlack] (-0.5, 0) -- (3.5, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -0.5) -- (0, 2.5) node[above] {$f(x)$};
+    
+    % Convex curve
+    \draw[eMediumBlue, ultra thick] (0.5, 2) .. controls (1.5, 0) and (2, 0) .. (3, 1.5);
+    
+    % Points and Secant
+    \coordinate (X) at (0.8, 1.25);
+    \coordinate (Y) at (2.8, 1.25);
+    \draw[eDarkRed, dashed] (X) -- (Y);
+    \fill[eDarkRed] (X) circle (2pt) node[left] {$f(x)$};
+    \fill[eDarkRed] (Y) circle (2pt) node[right] {$f(y)$};
+    
+    \node[eDarkRed, align=center] at (1.8, 1.6) {\small Secant line lies \\ \small \textbf{above} the graph};
+\end{tikzpicture}
+\end{center}
+
+\gemininote{The functional inequality simply states that a secant line between any two points on the graph always stays \qt{above} the function itself. Think of a bowl-shaped graph.}
+
+\begin{proposition*}
+Let $U \subseteq \R^n$ be open and convex, and $f \in C^2(U)$. The following statements are equivalent:
+\begin{enumerate}
+    \item $f$ is a convex function.
+    \item The Hessian matrix $\mathscr{H}f(x)$ is positive semi-definite for all $x \in U$.
+    \item $f(y) - f(x) \ge Df_x(y-x)$ for all $x, y \in U$. \textcolor{eGray}{(The graph always lies above its tangent planes.)}
+\end{enumerate}
+\end{proposition*}
+
+\hrulefill
+
+\section{The Inverse Function Theorem (IFT)}
+
+\begin{theorem*}[Inverse Function Theorem]
+Let $U \subseteq \R^n$ be open and $f \in C^k(U, \R^n)$. Let $x_0 \in U$ be a point such that the differential $Df_{x_0}$ is invertible ($\det(Jf(x_0)) \ne 0$).
+
+Then there exists an open neighborhood $U_0 \subseteq U$ around $x_0$ such that:
+\begin{enumerate}
+    \item $f|_{U_0}: U_0 \to f(U_0)$ is a $C^k$-diffeomorphism.
+    \item The derivative of the inverse is the inverse of the derivative: 
+    \[ D(f^{-1})_{f(x)} = (Df_x)^{-1} \]
+\end{enumerate}
+\end{theorem*}
+
+\begin{question*}
+\begin{enumerate}
+    \item If $f: \R^n \to \R^n$ is a $C^k$ homeomorphism, is it necessarily a $C^k$-diffeomorphism?
+    \item Does local invertibility everywhere imply global invertibility?
+\end{enumerate}
+\end{question*}
+
+\begin{answer*}
+\textbf{1. No.} Example: $f(x) = x^3$. The inverse $x^{1/3}$ is not differentiable at 0. \\
+\textbf{2. No.} Example: $f(x) = (\cos x, \sin x)$ has invertible derivative everywhere but is periodic (not injective).
+\end{answer*}
+
+\hrulefill
+
+\section{The Implicit Function Theorem}
+
+\begin{theorem*}[Implicit Function Theorem]
+Suppose $f(x_0, y_0) = 0$ and the partial Jacobian $J_y f(x_0, y_0)$ is invertible. Then there exists a unique local function $y = g(x)$ such that $f(x, g(x)) = 0$.
+The derivative is given by:
+\[ Jg(x) = -(J_y f)^{-1} J_x f \]
+\end{theorem*}
+
+\gemininote{This formula is just the Chain Rule in disguise! Differentiating $f(x, g(x)) = 0$ with respect to $x$ gives $J_x f + J_y f \cdot Jg = 0$. Solving for $Jg$ yields the result.}
+
+\begin{example*}[The Unit Circle]
+Consider $f(x,y) = x^2 + y^2 - 1 = 0$. We check $\partial_y f = 2y$.
+This is invertible if $y \ne 0$. Thus, for any point not on the x-axis, we can locally solve for $y = \pm\sqrt{1-x^2}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, very thick]
+    \draw[eMediumBlue] (0,0) circle (1cm);
+    \draw[->, eBlack] (-1.5,0) -- (1.5,0) node[right] {$x$};
+    \draw[->, eBlack] (0,-1.2) -- (0,1.2) node[above] {$y$};
+    
+    % Points where it fails
+    \fill[eDarkRed] (1,0) circle (1.5pt);
+    \fill[eDarkRed] (-1,0) circle (1.5pt);
+    \draw[eDarkRed, <->] (1.2, -0.3) -- (1.2, 0.3) node[right] {$\partial_y f = 0$};
+\end{tikzpicture}
+\end{center}
+\geminiwarning{At $y=0$, the tangent is vertical. The theorem fails here because a small step in $x$ would not uniquely determine $y$ (it could go up or down).}
+\end{example*}
+
+\section{The Implicit Function Theorem}
+
+\begin{theorem*}[Implicit Function Theorem]
+\textbf{Setup:} Let $n > n-d \ge 1$. Let $f \in C^k(\R^d \times \R^{n-d}, \R^{n-d})$. Suppose $f(x_0, y_0) = 0$ for some point $(x_0, y_0) \in \R^d \times \R^{n-d}$[cite: 16]. 
+Suppose the partial differential with respect to the $y$-variables, $D_y f(x_0, y_0)$, is bijective (i.e., the Jacobian $J_y f(x_0, y_0)$ is an invertible square matrix)[cite: 16].
+
+\textbf{Consequence:} There exist open neighborhoods $U \subseteq \R^d$ of $x_0$ and $V \subseteq \R^{n-d}$ of $y_0$, and a unique $C^k$ function $g: U \to V$ such that for all $(x,y) \in U \times V$:
+\[ f(x,y) = 0 \iff y = g(x) \]
+Furthermore, the derivative of this implicit function is given by:
+\[ Jg(x) = -\left( J_y f(x, g(x)) \right)^{-1} J_x f(x, g(x)) \]
+\end{theorem*}
+
+\gemininote{The TA notes mentioned that the geometrical meaning of this derivative formula \qt{eludes} them[cite: 16]. But it is actually a beautiful application of the \textbf{Multivariable Chain Rule}! Since we know $f(x, g(x)) = 0$ for all $x \in U$, differentiating both sides with respect to $x$ gives:
+\[ J_x f + J_y f \cdot Jg = 0 \]
+Solving for $Jg$ by moving $J_x f$ and multiplying by the inverse of $J_y f$ leads directly to the formula!}
+
+\begin{example*}[1. The Unit Circle $S^1$]
+Consider the level set of $f(x,y) = x^2 + y^2 - 1 = 0$[cite: 16]. We want to know if we can locally solve for $y$ as a function of $x$.
+The partial derivative with respect to $y$ is $\partial_y f = 2y$[cite: 16]. This is invertible (non-zero) as long as $y \neq 0$[cite: 16].
+
+\begin{center}
+\begin{tikzpicture}[scale=2, very thick]
+    % Unit circle
+    \draw[eMediumBlue] (0,0) circle (1cm);
+    \draw[->, eBlack] (-1.5, 0) -- (1.5, 0) node[right] {$x$};
+    \draw[->, eBlack] (0, -1.2) -- (0, 1.2) node[above] {$y$};
+    
+    % Point (x0, y0)
+    \coordinate (P) at (0.6, 0.8);
+    \fill[eDarkGreen] (P) circle (1.5pt) node[above right] {$(x_0, y_0)$};
+    
+    % Local window U x V
+    \draw[eDarkGreen, dashed] (0.3, 0.6) rectangle (0.9, 1.0);
+    \node[eDarkGreen] at (0.3, 1.1) {\small Window $U \times V$};
+    
+    % Highlighted local function y = g(x)
+    \draw[eDarkRed, ultra thick] (0.3, 0.954) arc (107.5:64.2:1cm);
+    \node[eDarkRed] at (1.1, 0.9) {\small $y = \sqrt{1-x^2}$};
+
+    % Points where it fails (y=0)
+    \fill[eDarkRed] (1,0) circle (1.5pt);
+    \fill[eDarkRed] (-1,0) circle (1.5pt);
+    \draw[eDarkRed, <->] (1.15, -0.2) -- (1.15, 0.2) node[midway, right, align=left] {\small Vertical tangent \\ \small ($\partial_y f = 0$)};
+    \node[eDarkRed] at (0, -0.4) {\small \qt{not possible around $y=0$}};
+\end{tikzpicture}
+\end{center}
+
+\geminiwarning{Around the points $(1,0)$ and $(-1,0)$, the tangent to the circle is vertical[cite: 16]. In any small window around these points, a single $x$-value would correspond to two different $y$-values (one on the upper half, one on the lower half). Therefore, we cannot define a unique function $y = g(x)$ there, which matches the fact that $\partial_y f = 0$ at those points.}
+\end{example*}
+
+\begin{example*}[2. The Quintic Equation]
+Consider $G(x,y) = y^5 + y^3 + y + x$[cite: 16]. Does the level set $G^{-1}\{0\}$ define a function $y = g(x)$ around $(0,0)$?
+We check the solution: $G(0,0) = 0^5 + 0^3 + 0 + 0 = 0$.
+Now check the $y$-derivative: $\partial_y G = 5y^4 + 3y^2 + 1$[cite: 16].
+At $(0,0)$, we have $\partial_y G(0,0) = 1 \neq 0$[cite: 16].
+
+By the Implicit Function Theorem, a local function $y = g(x)$ exists! This is a massive result because, according to Abel's Theorem, there is no general formula to solve for the roots of a 5th-degree polynomial. Yet, we know $y(x)$ exists and is smooth.
+\end{example*}

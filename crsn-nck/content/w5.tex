@@ -62,10 +62,12 @@ If the restricted function $f|_{g^{-1}\set{0}}$ has a local extremum at $x_0$, t
 Assuming the constraint gradients are independent, this means $\nabla f(x_0)$ is a linear combination of the constraint gradients. We can find these points by looking for critical points of the \textbf{Lagrangian}:
 \[ L(x, \lambda) := f(x) - \sum_{i=1}^k \lambda_i g_i(x) \]
 We force $\nabla L(x, \lambda) = 0$, which yields the system:
-\begin{align*}
-    \nabla f(x) - \lambda \cdot \nabla g(x) &= 0 \quad \text{\textcolor{eGray}{(Parallel gradients)}} \\
-    g_j(x) &= 0 \quad \text{\textcolor{eGray}{(You are actually on the surface)}}
-\end{align*}
+\begin{equation}
+    \begin{aligned}
+        \nabla f(x) - \lambda \cdot \nabla g(x) &= 0 \quad \text{\textcolor{eGray}{(Parallel gradients)}} \\
+        g_j(x) &= 0 \quad \text{\textcolor{eGray}{(You are actually on the surface)}}
+    \end{aligned}
+\end{equation}
 \end{proposition*}
 
 \begin{exercise*}
@@ -148,11 +150,13 @@ Let $\lambda_1, \dots, \lambda_n$ be the eigenvalues of $A$. Recall that $\det(A
 \geminiwarning{The handwritten notes contained a matrix that was not symmetric ($\begin{smallmatrix} -5 & 0 & 0 \\ 0 & -4 & -7 \\ 3 & -2 & -4 \end{smallmatrix}$). The Hurwitz criterion strictly applies \emph{only} to symmetric matrices! Let's look at the correct symmetric matrix the TA meant to evaluate:}
 
 \textbf{3.} $A = \begin{pmatrix} -5 & 0 & 0 \\ 0 & -4 & -2 \\ 0 & -2 & -4 \end{pmatrix}$. Let's check the Hurwitz minors:
-\begin{align*}
+\begin{equation}
+\begin{aligned}
     A_1 &= -5 \quad \textcolor{eGray}{(< 0)} \\
     A_2 &= \det\begin{pmatrix} -5 & 0 \\ 0 & -4 \end{pmatrix} = 20 \quad \textcolor{eGray}{(> 0)} \\
     A_3 &= \det(A) = -5 \cdot (16 - 4) = -60 \quad \textcolor{eGray}{(< 0)}
-\end{align*}
+\end{aligned}
+\end{equation}
 The signs alternate ($-, +, -$), so this is \textcolor{eDarkRed}{Negative definite}.
 
 \textbf{4.} $A = \begin{pmatrix} -1 & 0 & -4 \\ 0 & 2 & -2 \\ -4 & -2 & 22 \end{pmatrix}$. 
@@ -167,10 +171,12 @@ Find the critical points of $f_\alpha(x,y) = x^3 - y^3 + 3\alpha xy$ for a const
 
 \begin{solution}
 First, find the critical points by setting the gradient to zero:
-\begin{align}
+\begin{equation}
+\begin{aligned}
     \partial_x f &= 3x^2 + 3\alpha y = 0 \implies y = -\frac{x^2}{\alpha} \\
     \partial_y f &= -3y^2 + 3\alpha x = 0
-\end{align}
+\end{aligned}
+\end{equation}
 Substitute (1) into (2):
 \[ -3\left(-\frac{x^2}{\alpha}\right)^2 + 3\alpha x = 0 \implies -3\frac{x^4}{\alpha^2} + 3\alpha x = 0 \]
 Divide by 3 and factor out $x$:
